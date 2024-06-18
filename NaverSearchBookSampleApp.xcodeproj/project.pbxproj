@@ -16,6 +16,8 @@
 		CE8E8EB72C21AD5C0025D96C /* NaverSearchBookSampleAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8EB62C21AD5C0025D96C /* NaverSearchBookSampleAppTests.swift */; };
 		CE8E8EC12C21AD5C0025D96C /* NaverSearchBookSampleAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8EC02C21AD5C0025D96C /* NaverSearchBookSampleAppUITests.swift */; };
 		CE8E8EC32C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8EC22C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift */; };
+		CE8E8ED12C21B6260025D96C /* NaverSearchBookModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8ED02C21B6260025D96C /* NaverSearchBookModel.swift */; };
+		CE8E8ED32C21B6850025D96C /* NetworkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8ED22C21B6850025D96C /* NetworkAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		CE8E8EBC2C21AD5C0025D96C /* NaverSearchBookSampleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NaverSearchBookSampleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8E8EC02C21AD5C0025D96C /* NaverSearchBookSampleAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookSampleAppUITests.swift; sourceTree = "<group>"; };
 		CE8E8EC22C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookSampleAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CE8E8ED02C21B6260025D96C /* NaverSearchBookModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookModel.swift; sourceTree = "<group>"; };
+		CE8E8ED22C21B6850025D96C /* NetworkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,7 @@
 		CE8E8E9E2C21AD5A0025D96C /* NaverSearchBookSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE8E8ECF2C21AE350025D96C /* Model */,
 				CE8E8E9F2C21AD5A0025D96C /* AppDelegate.swift */,
 				CE8E8EA12C21AD5A0025D96C /* SceneDelegate.swift */,
 				CE8E8EA32C21AD5A0025D96C /* ViewController.swift */,
@@ -125,6 +130,15 @@
 				CE8E8EC22C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift */,
 			);
 			path = NaverSearchBookSampleAppUITests;
+			sourceTree = "<group>";
+		};
+		CE8E8ECF2C21AE350025D96C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CE8E8ED02C21B6260025D96C /* NaverSearchBookModel.swift */,
+				CE8E8ED22C21B6850025D96C /* NetworkAPI.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,8 +273,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE8E8EA42C21AD5A0025D96C /* ViewController.swift in Sources */,
+				CE8E8ED32C21B6850025D96C /* NetworkAPI.swift in Sources */,
 				CE8E8EA02C21AD5A0025D96C /* AppDelegate.swift in Sources */,
 				CE8E8EA22C21AD5A0025D96C /* SceneDelegate.swift in Sources */,
+				CE8E8ED12C21B6260025D96C /* NaverSearchBookModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,8 +464,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -457,9 +472,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngwoo.ahn.NaverSearchBookSampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -476,8 +495,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -485,9 +503,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.youngwoo.ahn.NaverSearchBookSampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
