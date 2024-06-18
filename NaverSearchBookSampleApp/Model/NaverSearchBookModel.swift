@@ -26,3 +26,18 @@ struct Item: Codable {
 	let author, discount, publisher, pubdate: String
 	let isbn, description: String
 }
+
+class NaverSearchBookModel {
+	func requestData() {
+		Task {
+			do {
+				let naverSearchBook = try await naverSearchBookAPI(
+					query: "프로그래밍", display: "3", start: "1")
+				print("Books: \(naverSearchBook)")
+			} catch {
+				print("Error: \(error.localizedDescription)")
+			}
+		}
+	}
+	
+}
