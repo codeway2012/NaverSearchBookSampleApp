@@ -9,16 +9,16 @@
 //
 //   let naverSearchBook = try? JSONDecoder().decode(NaverSearchBook.self, from: jsonData)
 
-import Foundation
+import UIKit
 
-// MARK: - NaverSearchBook
+// MARK: - Codable
+
 struct NaverSearchBook: Codable {
 	let lastBuildDate: String
 	let total, start, display: Int
 	let items: [Item]
 }
 
-// MARK: - Item
 struct Item: Codable {
 	let title: String
 	let link: String
@@ -27,17 +27,64 @@ struct Item: Codable {
 	let isbn, description: String
 }
 
+struct ErrorNaverSearchBook: Codable {
+	let errorMessage: String
+	let errorCode: String
+}
+
+// MARK: - Model
+
+struct NaverSearchBookAPIParams {
+	let query: String
+	let display: String = "3"
+	let start: String = "1"
+}
+
 class NaverSearchBookModel {
-	func requestData() {
-		Task {
-			do {
-				let naverSearchBook = try await naverSearchBookAPI(
-					query: "프로그래밍", display: "3", start: "1")
-				print("Books: \(naverSearchBook)")
-			} catch {
-				print("Error: \(error.localizedDescription)")
-			}
+	
+	// MARK: - Properties
+	
+	var naverSearchBookListDelegate: NaverSearchBookListDelegate?
+
+	var bookList: [Item] = [] {
+		didSet {
+			print("didSet - bookList")
+			print("bookList - \(bookList)")
+			naverSearchBookListDelegate?.tableReload()
+			?? print("not delegate tableReload")
 		}
 	}
 	
+	
+	
+	// MARK: - Func
+	
+	func searchBookList(query: String) {
+		print("func - searchBookList")
+		requestData(params: NaverSearchBookAPIParams(query: query))
+	}
+	
+	private func requestData(params: NaverSearchBookAPIParams) {
+		
+		Task {
+			do {
+				let naverSearchBook = try await naverSearchBookAPI(
+					query: params.query,
+					display: params.display,
+					start: params.start)
+				print("naverSearchBook : \(naverSearchBook)")
+				bookList = naverSearchBook.items
+			} catch {
+				print("Error: \(error.localizedDescription)")
+
+			}
+		}
+		
+	}
+	
+	func NaverSearchBookCount() -> Int {
+		print("count - \(bookList.count)")
+		return bookList.count
+	}
+
 }

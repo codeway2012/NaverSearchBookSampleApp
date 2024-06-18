@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 func naverSearchBookAPI(query: String, display: String, start: String)
 async throws -> NaverSearchBook {
 	
