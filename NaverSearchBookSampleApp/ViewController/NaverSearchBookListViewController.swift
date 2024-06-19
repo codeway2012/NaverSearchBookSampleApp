@@ -15,12 +15,7 @@ class NaverSearchBookListViewController:
 	UIViewController, UITableViewDataSource, UITableViewDelegate,
 	UISearchBarDelegate, NaverSearchBookListDelegate {
 
-	// MARK: - Properties
-	
-	let model = NaverSearchBookModel()
-	var searchQuery = "프로그래밍"
-	
-	// MARK: - UIComponent
+	// MARK: - UI Component
 	
 	let tableView = UITableView()
 	let searchBar = UISearchBar()
@@ -28,22 +23,25 @@ class NaverSearchBookListViewController:
 	let searchTextField = UITextField()
 	let searchButton = UIButton(type: .system)
 
+	// MARK: - Properties
+	
+	let model = NaverSearchBookModel()
+	var searchQuery = "프로그래밍"
 	
 	// MARK: - LifeCycle
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = .systemBackground
-		self.title = "BookList"
+		self.title = "Book List"
 		
 		setupUI()
 		setupLayout()
 		
 		searchBar.delegate = self
-		
-		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-		tableView.dataSource = self
 		tableView.delegate = self
+		tableView.dataSource = self
+		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
 		model.naverSearchBookListDelegate = self
 		model.searchBookList(query: searchQuery)
@@ -53,11 +51,13 @@ class NaverSearchBookListViewController:
 	
 	func setupUI() {
 		view.addSubview(searchBar)
-		searchBar.translatesAutoresizingMaskIntoConstraints = false
+		searchBar
+			.translatesAutoresizingMaskIntoConstraints = false
 		searchBar.text = searchQuery
 		
 		view.addSubview(tableView)
-		tableView.translatesAutoresizingMaskIntoConstraints = false
+		tableView
+			.translatesAutoresizingMaskIntoConstraints = false
 	}
 	
 	// MARK: - setupLayout
@@ -89,7 +89,6 @@ class NaverSearchBookListViewController:
 		.isActive = true
 	}
 
-	
 	// MARK: - UITableViewDataSource
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -123,8 +122,7 @@ class NaverSearchBookListViewController:
 		guard let book = model.book else { return }
 		print("Selected book title: \(book.mainTitle)")
 		
-		let vc = NaverSearchBookDetailViewController(
-			model: model)
+		let vc = NaverSearchBookDetailViewController(model: model)
 		navigationController?.pushViewController(
 			vc, animated: false)
 	}
@@ -161,7 +159,6 @@ class NaverSearchBookListViewController:
 		model.searchBookList(query: searchQuery)
 	}
 }
-
 
 #Preview {
 	UIStoryboard(name: "Main", bundle: nil)

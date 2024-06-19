@@ -8,11 +8,7 @@
 import UIKit
 
 class NaverSearchBookDetailViewController: UIViewController {
-	
-	// MARK: - properties
-	
-	let model: NaverSearchBookModel
-	
+
 	// MARK: - UIComponent
 	
 	let bookImageBackgroundView = UIView()
@@ -27,9 +23,13 @@ class NaverSearchBookDetailViewController: UIViewController {
 	let pubdateView = TextStackView()
 	let isbnView = TextStackView()
 	let descriptionView = TextStackView()
+	let linkView = TextStackView()
+	let linkButton = UIButton(type: .system)
 	
-	let tableView = UITableView()
-
+	// MARK: - properties
+	
+	let model: NaverSearchBookModel
+	
 	// MARK: - init
 	
 	init(model: NaverSearchBookModel) {
@@ -45,18 +45,21 @@ class NaverSearchBookDetailViewController: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		self.title = "BookDetail"
+		self.title = "Book Detail"
 		view.backgroundColor = .systemBackground
+		modifyLeftBarButtonItem()
 		
 		setupUI()
 		setupLayout()
+		
+		print("viewDidLoad")
     }
 	
-	override func viewDidDisappear(_ animated: Bool) {
-		model.book = nil
-		print(model.book?.title ?? "book nil")
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		print("viewDidLayoutSubviews - \(bookImageView.frame)")
 	}
-	
+
 	// MARK: - setupUI
 	
 	func setupUI() {
@@ -75,12 +78,11 @@ class NaverSearchBookDetailViewController: UIViewController {
 		bookImageView.layer.shadowOpacity = 0.5
 		bookImageView.layer.shadowOffset = CGSize(width: 4, height: 4)
 		bookImageView.layer.shadowRadius = 10
+		bookImageView.layer.shadowPath = nil
 		
 		// MARK: bookContentScrollView
 		view.addSubview(bookContentScrollView)
 		bookContentScrollView.translatesAutoresizingMaskIntoConstraints = false
-		bookContentScrollView.isScrollEnabled = true
-		bookContentScrollView.showsVerticalScrollIndicator = true
 
 		// MARK: bookContentStackView
 		bookContentScrollView.addSubview(bookContentStackView)
@@ -97,7 +99,7 @@ class NaverSearchBookDetailViewController: UIViewController {
 		
 		if (model.book?.subTitle ?? "" != "") {
 			bookContentStackView.addArrangedSubview(subTitleView)
-			subTitleView.setTitle("소제목")
+			subTitleView.setTitle("부제목")
 			subTitleView.setContent(model.book?.subTitle ?? "")
 		}
 		
@@ -125,6 +127,10 @@ class NaverSearchBookDetailViewController: UIViewController {
 		descriptionView.setTitle("책 소개")
 		descriptionView.setContent(model.book?.description ?? "")
 
+		bookContentStackView.addArrangedSubview(linkButton)
+		linkButton.setTitle("네이버 도서에서 보기", for: .normal)
+		linkButton.addTarget(self, action: #selector(pushWebViewController),
+							 for: .touchUpInside)
 	}
 	
 	// MARK: - setupLayout
@@ -143,16 +149,16 @@ class NaverSearchBookDetailViewController: UIViewController {
 		bookImageBackgroundView.heightAnchor.constraint(
 			equalToConstant: 300)
 		.isActive = true
-		
+
 		// MARK: bookImageView
-		bookImageView.heightAnchor.constraint(
-			equalToConstant: 220)
-		.isActive = true
 		bookImageView.centerXAnchor.constraint(
 			equalTo: bookImageBackgroundView.centerXAnchor)
 		.isActive = true
 		bookImageView.centerYAnchor.constraint(
 			equalTo: bookImageBackgroundView.centerYAnchor)
+		.isActive = true
+		bookImageView.heightAnchor.constraint(
+			equalToConstant: 220)
 		.isActive = true
 		
 		// MARK: bookContentScrollView
@@ -176,6 +182,12 @@ class NaverSearchBookDetailViewController: UIViewController {
 		bookContentStackView.bottomAnchor.constraint(
 			equalTo: bookContentScrollView.bottomAnchor)
 		.isActive = true
+		bookContentStackView.leadingAnchor.constraint(
+			equalTo: bookContentScrollView.leadingAnchor)
+		.isActive = true
+		bookContentStackView.trailingAnchor.constraint(
+			equalTo: bookContentScrollView.trailingAnchor)
+		.isActive = true
 		bookContentStackView.centerXAnchor.constraint(
 			equalTo: bookContentScrollView.centerXAnchor)
 		.isActive = true
@@ -183,53 +195,19 @@ class NaverSearchBookDetailViewController: UIViewController {
 			equalTo: bookContentScrollView.widthAnchor)
 		.isActive = true
 	}
-}
-
-class TextStackView: UIStackView {
-	private let titleLabel = UILabel()
-	private let contentLabel = UILabel()
 	
-	// 초기화 메서드
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		setupView()
+	// MARK: - objc func
+	@objc func pushWebViewController() {
+		let vc = NaverSearchBookWebViewController(model: model)
+		self.navigationController?.pushViewController(vc, animated: false)
 	}
 	
-	required init(coder: NSCoder) {
-		super.init(coder: coder)
-		setupView()
-	}
-	
-	// 커스텀 초기화 메서드
-	convenience init(title: String, content: String) {
-		self.init(frame: .zero)
-		setTitle(title)
-		setContent(content)
-	}
-	
-	// UIStackView 설정
-	private func setupView() {
-		axis = .vertical
-		spacing = 6
-		alignment = .leading
-		distribution = .fill
-		
-		titleLabel.font = UIFont.boldSystemFont(ofSize: 22)
-		contentLabel.font = UIFont.systemFont(ofSize: 16)
-		contentLabel.numberOfLines = 0
-		contentLabel.lineBreakMode = .byClipping
-		
-		addArrangedSubview(titleLabel)
-		addArrangedSubview(contentLabel)
-	}
-	
-	// 제목 설정
-	func setTitle(_ title: String) {
-		titleLabel.text = title
-	}
-	
-	// 내용 설정
-	func setContent(_ content: String) {
-		contentLabel.text = content
+	@objc override func leftBarButtonTapped() {
+		if let vc = navigationController?.viewControllers.last,
+		   vc is NaverSearchBookDetailViewController {
+			model.book = nil
+			print("book - \(model.book?.mainTitle ?? "nil")")
+		}
+		super.leftBarButtonTapped()
 	}
 }

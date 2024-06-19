@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		CE6624472C22B16200437544 /* NaverSearchBookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6624462C22B16200437544 /* NaverSearchBookDetailViewController.swift */; };
+		CE6624492C232CEC00437544 /* NaverSearchBookWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6624482C232CEC00437544 /* NaverSearchBookWebViewController.swift */; };
+		CE66244C2C2330F500437544 /* TextStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE66244B2C2330F500437544 /* TextStackView.swift */; };
+		CE66244E2C2330FD00437544 /* NavigationLeftBackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE66244D2C2330FD00437544 /* NavigationLeftBackButton.swift */; };
 		CE8E8EA02C21AD5A0025D96C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8E9F2C21AD5A0025D96C /* AppDelegate.swift */; };
 		CE8E8EA22C21AD5A0025D96C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8EA12C21AD5A0025D96C /* SceneDelegate.swift */; };
 		CE8E8EA42C21AD5A0025D96C /* NaverSearchBookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8EA32C21AD5A0025D96C /* NaverSearchBookListViewController.swift */; };
@@ -40,6 +43,9 @@
 
 /* Begin PBXFileReference section */
 		CE6624462C22B16200437544 /* NaverSearchBookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookDetailViewController.swift; sourceTree = "<group>"; };
+		CE6624482C232CEC00437544 /* NaverSearchBookWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookWebViewController.swift; sourceTree = "<group>"; };
+		CE66244B2C2330F500437544 /* TextStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStackView.swift; sourceTree = "<group>"; };
+		CE66244D2C2330FD00437544 /* NavigationLeftBackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLeftBackButton.swift; sourceTree = "<group>"; };
 		CE8E8E9C2C21AD5A0025D96C /* NaverSearchBookSampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverSearchBookSampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8E8E9F2C21AD5A0025D96C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE8E8EA12C21AD5A0025D96C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +88,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE66244A2C2330E300437544 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				CE66244B2C2330F500437544 /* TextStackView.swift */,
+				CE66244D2C2330FD00437544 /* NavigationLeftBackButton.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		CE8E8E932C21AD5A0025D96C = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +120,7 @@
 		CE8E8E9E2C21AD5A0025D96C /* NaverSearchBookSampleApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE66244A2C2330E300437544 /* Utils */,
 				CE8E8ED42C21C0D30025D96C /* ViewController */,
 				CE8E8ECF2C21AE350025D96C /* Model */,
 				CE8E8E9F2C21AD5A0025D96C /* AppDelegate.swift */,
@@ -148,6 +164,7 @@
 			children = (
 				CE8E8EA32C21AD5A0025D96C /* NaverSearchBookListViewController.swift */,
 				CE6624462C22B16200437544 /* NaverSearchBookDetailViewController.swift */,
+				CE6624482C232CEC00437544 /* NaverSearchBookWebViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -283,12 +300,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE6624492C232CEC00437544 /* NaverSearchBookWebViewController.swift in Sources */,
 				CE8E8EA42C21AD5A0025D96C /* NaverSearchBookListViewController.swift in Sources */,
 				CE8E8ED32C21B6850025D96C /* NaverSearchBookAPI.swift in Sources */,
 				CE8E8EA02C21AD5A0025D96C /* AppDelegate.swift in Sources */,
 				CE6624472C22B16200437544 /* NaverSearchBookDetailViewController.swift in Sources */,
+				CE66244E2C2330FD00437544 /* NavigationLeftBackButton.swift in Sources */,
 				CE8E8EA22C21AD5A0025D96C /* SceneDelegate.swift in Sources */,
 				CE8E8ED12C21B6260025D96C /* NaverSearchBookModel.swift in Sources */,
+				CE66244C2C2330F500437544 /* TextStackView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
