@@ -12,86 +12,74 @@ protocol NaverSearchBookListDelegate {
 }
 
 class NaverSearchBookListViewController:
-	UIViewController, UITableViewDataSource, UITableViewDelegate, NaverSearchBookListDelegate {
+	UIViewController, UITableViewDataSource, UITableViewDelegate,
+	UISearchBarDelegate, NaverSearchBookListDelegate {
 
 	// MARK: - Properties
 	
 	let model = NaverSearchBookModel()
-	var searchText = "프로그래밍"
+	var searchQuery = "프로그래밍"
 	
 	// MARK: - UIComponent
 	
 	let tableView = UITableView()
+	let searchBar = UISearchBar()
 	let searchStackView = UIStackView()
 	let searchTextField = UITextField()
 	let searchButton = UIButton(type: .system)
+
 	
 	// MARK: - LifeCycle
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = .systemBackground
+		self.title = "BookList"
+		
+		setupUI()
+		setupLayout()
+		
+		searchBar.delegate = self
 		
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 		tableView.dataSource = self
 		tableView.delegate = self
-		
+
 		model.naverSearchBookListDelegate = self
-		model.searchBookList(query: searchText)
-		
-		setupUI()
-		setupLayout()
+		model.searchBookList(query: searchQuery)
 	}
 	
 	// MARK: - setupUI
 	
 	func setupUI() {
+		view.addSubview(searchBar)
+		searchBar.translatesAutoresizingMaskIntoConstraints = false
+		searchBar.text = searchQuery
+		
 		view.addSubview(tableView)
 		tableView.translatesAutoresizingMaskIntoConstraints = false
-		
-		view.addSubview(searchStackView)
-		searchStackView.translatesAutoresizingMaskIntoConstraints = false
-		searchStackView.axis = .horizontal
-		searchStackView.spacing = 8
-		searchStackView.alignment = .fill
-		searchStackView.distribution = .fill
-		
-		searchStackView.addArrangedSubview(searchTextField)
-		searchTextField.placeholder = "프로그래밍"
-		searchTextField.borderStyle = .roundedRect
-		searchTextField.addTarget(
-			self, action: #selector(textFieldDidChange(_:)),
-			for: .editingChanged)
-		
-		searchStackView.addArrangedSubview(searchButton)
-		searchButton.addTarget(self, action: #selector(serach), for: .touchUpInside)
-		searchButton.setTitle("search", for: .normal)
-		
 	}
 	
 	// MARK: - setupLayout
 	
 	func setupLayout() {
-		searchStackView.topAnchor.constraint(
+		searchBar.topAnchor.constraint(
 			equalTo: view.safeAreaLayoutGuide.topAnchor)
 		.isActive = true
-//		searchStack.heightAnchor.constraint(
-//			equalToConstant: 100)
-//		.isActive = true
-		searchStackView.leadingAnchor.constraint(
+		searchBar.leadingAnchor.constraint(
 			equalTo: view.leadingAnchor,
 			constant: 20)
 		.isActive = true
-		searchStackView.trailingAnchor.constraint(
+		searchBar.trailingAnchor.constraint(
 			equalTo: view.trailingAnchor,
 			constant: -20)
 		.isActive = true
 		
 		tableView.topAnchor.constraint(
-			equalTo: searchStackView.bottomAnchor)
+			equalTo: searchBar.bottomAnchor)
 		.isActive = true
 		tableView.bottomAnchor.constraint(
-			equalTo: view.bottomAnchor)
+			equalTo: view.safeAreaLayoutGuide.bottomAnchor)
 		.isActive = true
 		tableView.leadingAnchor.constraint(
 			equalTo: view.leadingAnchor)
@@ -99,6 +87,64 @@ class NaverSearchBookListViewController:
 		tableView.trailingAnchor.constraint(
 			equalTo: view.trailingAnchor)
 		.isActive = true
+	}
+
+	
+	// MARK: - UITableViewDataSource
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return model.naverSearchBookListCount()
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(
+				withIdentifier: "cell", for: indexPath)
+		let book = model.bookList[indexPath.row]
+
+		var config = cell.defaultContentConfiguration()
+		config.image = book.image
+		config.text = book.mainTitle
+		config.secondaryText = book.subTitle
+		config.imageProperties
+			.reservedLayoutSize = CGSize(width: 50, height: 80)
+		config.imageProperties
+			.maximumSize = CGSize(width: 50, height: 80)
+		
+		cell.contentConfiguration = config
+		cell.separatorInset = UIEdgeInsets(
+			top: 0, left: 5, bottom: 0, right: 5)
+		return cell
+	}
+	
+	// MARK: - UITableViewDelegate
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		model.book = model.bookList[indexPath.row]
+		guard let book = model.book else { return }
+		print("Selected book title: \(book.mainTitle)")
+		
+		let vc = NaverSearchBookDetailViewController(
+			model: model)
+		navigationController?.pushViewController(
+			vc, animated: false)
+	}
+	
+	// MARK: - UISearchBarDelegate
+	
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		searchQuery = searchText
+		print("textDidChange - \(self.searchQuery)")
+	}
+	
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		searchBar.resignFirstResponder()
+		model.searchBookList(query: searchQuery)
+	}
+
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		searchQuery = ""
+		searchBar.text = searchQuery
+		searchBar.resignFirstResponder()
 	}
 	
 	// MARK: - NaverSearchBookListDelegate
@@ -109,43 +155,15 @@ class NaverSearchBookListViewController:
 		}
 	}
 	
-	// MARK: - UITableViewDataSource
-	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return model.naverSearchBookCount()
-	}
-	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView
-			.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-		let book = model.bookList[indexPath.row]
-		
-		var config = cell.defaultContentConfiguration()
-		config.text = book.title
-		config.image = book.image
-		config.imageProperties.maximumSize = CGSize(width: 60, height: 60)
-		cell.contentConfiguration = config
-		
-		return cell
-	}
-	
-	// MARK: - UITableViewDelegate
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		print("Selected book: \(model.bookList[indexPath.row].title)")
-	}
-	
 	// MARK: - objc method
 	
 	@objc func serach() {
-		model.searchBookList(query: searchText)
+		model.searchBookList(query: searchQuery)
 	}
-	
-	@objc func textFieldDidChange(_ textField: UITextField) {
-		self.searchText = textField.text ?? ""
-		print("textFieldDidChange - \(self.searchText)")
-	}
-
 }
 
 
+#Preview {
+	UIStoryboard(name: "Main", bundle: nil)
+		.instantiateInitialViewController()!
+}

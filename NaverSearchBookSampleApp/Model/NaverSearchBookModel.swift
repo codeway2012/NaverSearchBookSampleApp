@@ -4,14 +4,10 @@
 //
 //  Created by user on 6/18/24.
 //
-// This file was generated from JSON Schema using quicktype, do not modify it directly.
-// To parse the JSON, add this file to your project and do:
-//
-//   let naverSearchBook = try? JSONDecoder().decode(NaverSearchBook.self, from: jsonData)
 
 import UIKit
 
-// MARK: - Codable
+// MARK: - Codable Entity
 
 struct NaverSearchBookResult: Codable {
 	let lastBuildDate: String
@@ -32,14 +28,15 @@ struct NaverSearchError: Codable, Error  {
 	let errorCode: String
 }
 
-// MARK: - Model
+// MARK: - Entity
+
 struct NaverSearchBookAPIParams {
 	let query: String
 	let display: String
 	let start: String
 	
 	init(query: String,
-		 display: String = "3", start: String = "1") {
+		 display: String = "20", start: String = "1") {
 		self.query = query
 		self.display = display
 		self.start = start
@@ -56,7 +53,9 @@ struct Book {
 	let pubdate: String
 	let isbn: String
 	let description: String
-	var image: UIImage? = UIImage(systemName: "photo")
+	var mainTitle: String
+	var subTitle: String
+	var image: UIImage
 	
 	init(_ item: NaverSearchBookResult.Item) {
 		self.title = item.title
@@ -68,17 +67,40 @@ struct Book {
 		self.pubdate = item.pubdate
 		self.isbn = item.isbn
 		self.description = item.description
+		
+		if let range = item.title.range(of: " (") {
+			self.mainTitle = String(item.title[..<range.lowerBound])
+			self.subTitle = String(item.title[range.lowerBound...])
+			
+			let text = self.subTitle
+			let startIndex = text.index(text.startIndex, offsetBy: 2)
+			let endIndex = text.index(text.endIndex, offsetBy: -1)
+			self.subTitle = String(text[startIndex..<endIndex])
+		} else {
+			self.mainTitle = item.title
+			self.subTitle = ""
+		}
+		
+		self.image = UIImage(systemName: "photo") ?? UIImage()
 	}
 
+	
 }
+
+// MARK: - Model Class
 
 class NaverSearchBookModel {
 	
 	// MARK: - Properties
-	
+	var naverSearchBookAPI = NaverSearchBookAPI()
 	var naverSearchBookListDelegate: NaverSearchBookListDelegate?
+	var book: Book?
 	
-	var bookList: [Book] = []
+	var bookList: [Book] = [] {
+		didSet {
+			naverSearchBookListDelegate?.tableReload()
+		}
+	}
 	
 	// MARK: - Func
 	
@@ -90,20 +112,24 @@ class NaverSearchBookModel {
 	private func requestData(params: NaverSearchBookAPIParams) {
 		Task {
 			do {
-				let naverSearchBook = try await naverSearchBookAPI(
-					query: params.query,
-					display: params.display,
-					start: params.start)
+				self.bookList = []
+				
+				let naverSearchBook = try await naverSearchBookAPI
+					.searchBook(
+						query: params.query,
+						display: params.display,
+						start: params.start
+					)
 				
 				var bookListTemp: [Book] = []
 				for item in naverSearchBook.items {
 					var book = Book(item)
-					book.image = try await downloadImage(book.imageLink)
+					book.image = try await naverSearchBookAPI
+						.downloadImage(book.imageLink) ?? book.image
 					bookListTemp.append(book)
 				}
 				
 				self.bookList = bookListTemp
-				naverSearchBookListDelegate?.tableReload()
 			} catch let error as NaverSearchError {
 				print("message: \(error.errorMessage), code: \(error.errorCode)")
 			} catch {
@@ -113,14 +139,7 @@ class NaverSearchBookModel {
 		
 	}
 	
-	func downloadImage(_ imageLink: String)
-	async throws -> UIImage? {
-		guard let url = URL(string: imageLink) else { return UIImage() }
-		let (data, _) = try await URLSession.shared.data(from: url)
-		return UIImage(data: data)
-	}
-	
-	func naverSearchBookCount() -> Int {
+	func naverSearchBookListCount() -> Int {
 		NSLog("Model naverSearchBookCount - \(bookList.count)")
 		return bookList.count
 	}
