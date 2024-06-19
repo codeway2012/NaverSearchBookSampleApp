@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 
+// MARK: - Declaration
 class NaverSearchBookWebViewController: UIViewController {
 
 	// MARK: - UI Component
@@ -29,6 +30,11 @@ class NaverSearchBookWebViewController: UIViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+}
+
+// MARK: - UI Setting
+extension NaverSearchBookWebViewController {
+	
 	// MARK: - LifeCycle
 	
 	override func loadView() {
@@ -37,17 +43,16 @@ class NaverSearchBookWebViewController: UIViewController {
 		view = webView
 	}
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		self.title = "Book WebView"
 		view.backgroundColor = .systemBackground
 		modifyLeftBarButtonItem()
 		
 		setupUI()
-    }
+	}
 	
-	// MARK: - setupUI
-	
+	// MARK: -
 	func setupUI() {
 		// URL 로드
 		if let urlString = model.book?.link,
@@ -56,5 +61,4 @@ class NaverSearchBookWebViewController: UIViewController {
 			webView.load(request)
 		}
 	}
-	
 }

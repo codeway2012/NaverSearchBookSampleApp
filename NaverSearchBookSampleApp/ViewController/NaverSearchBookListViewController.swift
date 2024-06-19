@@ -7,10 +7,7 @@
 
 import UIKit
 
-protocol NaverSearchBookListDelegate {
-	func tableReload()
-}
-
+// MARK: - Declaration
 class NaverSearchBookListViewController:
 	UIViewController, UITableViewDataSource, UITableViewDelegate,
 	UISearchBarDelegate, NaverSearchBookListDelegate {
@@ -27,6 +24,10 @@ class NaverSearchBookListViewController:
 	
 	let model = NaverSearchBookModel()
 	var searchQuery = "프로그래밍"
+}
+
+// MARK: - UI Setting
+extension NaverSearchBookListViewController {
 	
 	// MARK: - LifeCycle
 	
@@ -42,13 +43,12 @@ class NaverSearchBookListViewController:
 		tableView.delegate = self
 		tableView.dataSource = self
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-
+		
 		model.naverSearchBookListDelegate = self
 		model.searchBookList(query: searchQuery)
 	}
 	
-	// MARK: - setupUI
-	
+	// MARK: -
 	func setupUI() {
 		view.addSubview(searchBar)
 		searchBar
@@ -60,8 +60,7 @@ class NaverSearchBookListViewController:
 			.translatesAutoresizingMaskIntoConstraints = false
 	}
 	
-	// MARK: - setupLayout
-	
+	// MARK: -
 	func setupLayout() {
 		searchBar.topAnchor.constraint(
 			equalTo: view.safeAreaLayoutGuide.topAnchor)
@@ -88,7 +87,17 @@ class NaverSearchBookListViewController:
 			equalTo: view.trailingAnchor)
 		.isActive = true
 	}
+	
+	// MARK: - objc method
+	
+	@objc func serach() {
+		model.searchBookList(query: searchQuery)
+	}
+}
 
+// MARK: - Delegate
+extension NaverSearchBookListViewController {
+	
 	// MARK: - UITableViewDataSource
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,9 +106,9 @@ class NaverSearchBookListViewController:
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(
-				withIdentifier: "cell", for: indexPath)
+			withIdentifier: "cell", for: indexPath)
 		let book = model.bookList[indexPath.row]
-
+		
 		var config = cell.defaultContentConfiguration()
 		config.image = book.image
 		config.text = book.mainTitle
@@ -138,7 +147,7 @@ class NaverSearchBookListViewController:
 		searchBar.resignFirstResponder()
 		model.searchBookList(query: searchQuery)
 	}
-
+	
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
 		searchQuery = ""
 		searchBar.text = searchQuery
@@ -152,12 +161,7 @@ class NaverSearchBookListViewController:
 			self.tableView.reloadData()
 		}
 	}
-	
-	// MARK: - objc method
-	
-	@objc func serach() {
-		model.searchBookList(query: searchQuery)
-	}
+
 }
 
 #Preview {

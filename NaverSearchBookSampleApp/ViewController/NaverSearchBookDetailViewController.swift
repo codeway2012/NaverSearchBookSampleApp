@@ -7,6 +7,7 @@
 
 import UIKit
 
+// MARK: - Declaration
 class NaverSearchBookDetailViewController: UIViewController {
 
 	// MARK: - UIComponent
@@ -26,11 +27,11 @@ class NaverSearchBookDetailViewController: UIViewController {
 	let linkView = TextStackView()
 	let linkButton = UIButton(type: .system)
 	
-	// MARK: - properties
+	// MARK: - Properties
 	
 	let model: NaverSearchBookModel
 	
-	// MARK: - init
+	// MARK: - Init
 	
 	init(model: NaverSearchBookModel) {
 		self.model = model
@@ -40,11 +41,15 @@ class NaverSearchBookDetailViewController: UIViewController {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+}
+
+// MARK: - UI Setting
+extension NaverSearchBookDetailViewController {
 	
 	// MARK: - LifeCycle
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 		self.title = "Book Detail"
 		view.backgroundColor = .systemBackground
 		modifyLeftBarButtonItem()
@@ -53,15 +58,14 @@ class NaverSearchBookDetailViewController: UIViewController {
 		setupLayout()
 		
 		print("viewDidLoad")
-    }
+	}
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		print("viewDidLayoutSubviews - \(bookImageView.frame)")
 	}
-
-	// MARK: - setupUI
 	
+	// MARK: -
 	func setupUI() {
 		// MARK: bookImageBackgroundView
 		view.addSubview(bookImageBackgroundView)
@@ -83,7 +87,7 @@ class NaverSearchBookDetailViewController: UIViewController {
 		// MARK: bookContentScrollView
 		view.addSubview(bookContentScrollView)
 		bookContentScrollView.translatesAutoresizingMaskIntoConstraints = false
-
+		
 		// MARK: bookContentStackView
 		bookContentScrollView.addSubview(bookContentStackView)
 		bookContentStackView
@@ -126,15 +130,14 @@ class NaverSearchBookDetailViewController: UIViewController {
 		bookContentStackView.addArrangedSubview(descriptionView)
 		descriptionView.setTitle("책 소개")
 		descriptionView.setContent(model.book?.description ?? "")
-
+		
 		bookContentStackView.addArrangedSubview(linkButton)
 		linkButton.setTitle("네이버 도서에서 보기", for: .normal)
 		linkButton.addTarget(self, action: #selector(pushWebViewController),
 							 for: .touchUpInside)
 	}
 	
-	// MARK: - setupLayout
-	
+	// MARK: -
 	func setupLayout() {
 		// MARK: bookImageBackgroundView
 		bookImageBackgroundView.topAnchor.constraint(
@@ -149,7 +152,7 @@ class NaverSearchBookDetailViewController: UIViewController {
 		bookImageBackgroundView.heightAnchor.constraint(
 			equalToConstant: 300)
 		.isActive = true
-
+		
 		// MARK: bookImageView
 		bookImageView.centerXAnchor.constraint(
 			equalTo: bookImageBackgroundView.centerXAnchor)
@@ -197,6 +200,7 @@ class NaverSearchBookDetailViewController: UIViewController {
 	}
 	
 	// MARK: - objc func
+	
 	@objc func pushWebViewController() {
 		let vc = NaverSearchBookWebViewController(model: model)
 		self.navigationController?.pushViewController(vc, animated: false)
