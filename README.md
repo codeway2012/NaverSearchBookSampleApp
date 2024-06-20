@@ -12,14 +12,14 @@ https://developers.naver.com/docs/serviceapi/search/book/book.md
 <br>
 
 ### Model
-
+데이터 정의 및 보관, 네트워크 처리
 - NaverSearchBookModel.swif
 - NaverSearchBookAPI.swift
 
 <br>
 
 ### ViewController
-
+UI 뷰, 네비게이션
 - NaverSearchBookListViewController.swift 
 - NaverSearchBookDetailViewController.swift
 
