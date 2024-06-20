@@ -88,6 +88,18 @@ extension NaverSearchBookListViewController {
 		.isActive = true
 	}
 	
+	// MARK: - method
+	
+	func navigationPushDetailVC(index: Int) {
+		model.book = model.bookList[index]
+		guard let book = model.book else { return }
+		print("Selected book title: \(book.mainTitle)")
+		
+		let vc = NaverSearchBookDetailViewController(model: model)
+		navigationController?.pushViewController(
+			vc, animated: false)
+	}
+	
 	// MARK: - objc method
 	
 	@objc func serach() {
@@ -127,13 +139,7 @@ extension NaverSearchBookListViewController {
 	// MARK: - UITableViewDelegate
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		model.book = model.bookList[indexPath.row]
-		guard let book = model.book else { return }
-		print("Selected book title: \(book.mainTitle)")
-		
-		let vc = NaverSearchBookDetailViewController(model: model)
-		navigationController?.pushViewController(
-			vc, animated: false)
+		navigationPushDetailVC(index: indexPath.row)
 	}
 	
 	// MARK: - UISearchBarDelegate

@@ -215,3 +215,11 @@ extension NaverSearchBookDetailViewController {
 		super.leftBarButtonTapped()
 	}
 }
+
+//#Preview {
+//	let model = NaverSearchBookModel()
+//	model.sampleBookList()
+//	model.book = model.bookList[0]
+//	return NaverSearchBookDetailViewController(
+//		model: model)
+//}

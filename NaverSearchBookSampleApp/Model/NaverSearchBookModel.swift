@@ -83,12 +83,11 @@ struct Book {
 		
 		self.image = UIImage(systemName: "photo") ?? UIImage()
 	}
-
+	
 	
 }
 
 // MARK: - Model Class
-
 class NaverSearchBookModel {
 	
 	// MARK: - Properties
@@ -133,7 +132,7 @@ class NaverSearchBookModel {
 			} catch let error as NaverSearchError {
 				print("message: \(error.errorMessage), code: \(error.errorCode)")
 			} catch {
-				print("exption: \(error)")
+				print("error: \(error)")
 			}
 		}
 		
@@ -145,3 +144,35 @@ class NaverSearchBookModel {
 	}
 	
 }
+
+// MARK: - SampleData
+extension NaverSearchBookModel {
+	func sampleBookList() -> Void {
+
+		guard let fileUrl = Bundle.main
+			.url(forResource: "SampleJSON", withExtension: "json") else {
+			print("파일을 찾을 수 없습니다.")
+			return
+		}
+		
+		do {
+			let jsonData = try Data(contentsOf: fileUrl)
+			
+			let decodeData = try JSONDecoder()
+				.decode(NaverSearchBookResult.self, from: jsonData)
+			Task {
+				var bookListTemp: [Book] = []
+				for item in decodeData.items {
+					var book = Book(item)
+					book.image = try await naverSearchBookAPI
+						.downloadImage(book.imageLink) ?? book.image
+					bookListTemp.append(book)
+				}
+				self.bookList = bookListTemp
+			}
+		} catch {
+			print("error : \(error)")
+		}
+	}
+}
+
