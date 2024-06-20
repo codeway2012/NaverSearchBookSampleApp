@@ -20,8 +20,8 @@ https://developers.naver.com/docs/serviceapi/search/book/book.md
 
 ### ViewController
 UI 뷰, 네비게이션
-- NaverSearchBookListViewController.swift 
-- NaverSearchBookDetailViewController.swift
+- 목록 : NaverSearchBookListViewController.swift 
+- 상세 : NaverSearchBookDetailViewController.swift
 
 <br>
 
