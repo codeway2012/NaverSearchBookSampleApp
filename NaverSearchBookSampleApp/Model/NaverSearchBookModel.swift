@@ -7,14 +7,14 @@
 
 import UIKit
 
-// MARK: - Codable Entity
+// MARK: - Decodable
 
-struct NaverSearchBookResult: Codable {
+struct NaverSearchBookResult: Decodable {
 	let lastBuildDate: String
 	let total, start, display: Int
 	let items: [Item]
 	
-	struct Item: Codable {
+	struct Item: Decodable {
 		let title: String
 		let link: String
 		let image: String
@@ -23,7 +23,7 @@ struct NaverSearchBookResult: Codable {
 	}
 }
 
-struct NaverSearchError: Codable, Error  {
+struct NaverSearchError: Decodable, Error  {
 	let errorMessage: String
 	let errorCode: String
 }
@@ -84,62 +84,56 @@ struct Book {
 		self.image = UIImage(systemName: "photo") ?? UIImage()
 	}
 	
-	
 }
 
 // MARK: - Model Class
 class NaverSearchBookModel {
 	
 	// MARK: - Properties
+	
 	var naverSearchBookAPI = NaverSearchBookAPI()
 	var naverSearchBookListDelegate: NaverSearchBookListDelegate?
+	var naverSearchBookDetailDelegate: NaverSearchBookDetailDelegate?
+	var bookList: [Book] = []
 	var book: Book?
-	
-	var bookList: [Book] = [] {
-		didSet {
-			naverSearchBookListDelegate?.tableReload()
-		}
-	}
 	
 	// MARK: - Func
 	
 	func searchBookList(query: String) {
 		print("Model searchBookList")
-		requestData(params: NaverSearchBookAPIParams(query: query))
+		Task { await requestData(params: NaverSearchBookAPIParams(query: query)) }
 	}
 	
-	private func requestData(params: NaverSearchBookAPIParams) {
-		Task {
-			do {
-				self.bookList = []
-				
-				let naverSearchBook = try await naverSearchBookAPI
-					.searchBook(
-						query: params.query,
-						display: params.display,
-						start: params.start
-					)
-				
-				var bookListTemp: [Book] = []
-				for item in naverSearchBook.items {
-					var book = Book(item)
-					book.image = try await naverSearchBookAPI
-						.downloadImage(book.imageLink) ?? book.image
-					bookListTemp.append(book)
+	private func requestData(params: NaverSearchBookAPIParams) async {
+		do {
+			self.bookList = []
+			
+			let naverSearchBookResult = try await naverSearchBookAPI
+				.searchBook(
+					query: params.query,
+					display: params.display,
+					start: params.start
+				)
+			self.bookList = naverSearchBookResult.items.map { Book($0) }
+			naverSearchBookListDelegate?.reloadTable()
+			
+			Task {
+				for (index, value) in bookList.enumerated() {
+					bookList[index].image = try await naverSearchBookAPI
+						.downloadImage(value.imageLink) ?? bookList[index].image
+					naverSearchBookListDelegate?
+						.reloadTableCell(index: index)
 				}
-				
-				self.bookList = bookListTemp
-			} catch let error as NaverSearchError {
-				print("message: \(error.errorMessage), code: \(error.errorCode)")
-			} catch {
-				print("error: \(error)")
 			}
+		} catch let error as NaverSearchError {
+			print("message: \(error.errorMessage), code: \(error.errorCode)")
+		} catch {
+			print("error: \(error)")
 		}
-		
 	}
 	
 	func naverSearchBookListCount() -> Int {
-		NSLog("Model naverSearchBookCount - \(bookList.count)")
+		NSLog("Model naverSearchBookListCount - \(bookList.count)")
 		return bookList.count
 	}
 	
@@ -148,7 +142,6 @@ class NaverSearchBookModel {
 // MARK: - SampleData
 extension NaverSearchBookModel {
 	func sampleBookList() -> Void {
-
 		guard let fileUrl = Bundle.main
 			.url(forResource: "SampleJSON", withExtension: "json") else {
 			print("파일을 찾을 수 없습니다.")
@@ -156,23 +149,31 @@ extension NaverSearchBookModel {
 		}
 		
 		do {
-			let jsonData = try Data(contentsOf: fileUrl)
+			let naverSearchBookResultData = try Data(contentsOf: fileUrl)
+			let naverSearchBookResult = try JSONDecoder()
+				.decode(NaverSearchBookResult.self, from: naverSearchBookResultData)
+	
+			self.bookList = naverSearchBookResult.items.map { Book($0) }
+			naverSearchBookListDelegate?.reloadTable()
 			
-			let decodeData = try JSONDecoder()
-				.decode(NaverSearchBookResult.self, from: jsonData)
 			Task {
-				var bookListTemp: [Book] = []
-				for item in decodeData.items {
-					var book = Book(item)
-					book.image = try await naverSearchBookAPI
-						.downloadImage(book.imageLink) ?? book.image
-					bookListTemp.append(book)
+				for (index, value) in bookList.enumerated() {
+					bookList[index].image = try await naverSearchBookAPI
+						.downloadImage(value.imageLink) ?? bookList[index].image
+					naverSearchBookListDelegate?
+						.reloadTableCell(index: index)
+					if index == 0 {
+						naverSearchBookDetailDelegate?
+							.reloadImage(image: bookList[index].image)
+					}
 				}
-				self.bookList = bookListTemp
 			}
+		} catch let error as NaverSearchError {
+			print("message: \(error.errorMessage), code: \(error.errorCode)")
 		} catch {
-			print("error : \(error)")
+			print("error: \(error)")
 		}
+		
 	}
 }
 

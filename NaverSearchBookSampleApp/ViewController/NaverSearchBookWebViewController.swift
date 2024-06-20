@@ -62,3 +62,11 @@ extension NaverSearchBookWebViewController {
 		}
 	}
 }
+
+#Preview {
+	let model = NaverSearchBookModel()
+	model.sampleBookList()
+	model.book = model.bookList[0]
+	return NaverSearchBookWebViewController(
+		model: model)
+}

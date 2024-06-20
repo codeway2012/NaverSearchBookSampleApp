@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Declaration
-class NaverSearchBookDetailViewController: UIViewController {
+class NaverSearchBookDetailViewController: UIViewController, NaverSearchBookDetailDelegate {
 
 	// MARK: - UIComponent
 	
@@ -29,12 +29,13 @@ class NaverSearchBookDetailViewController: UIViewController {
 	
 	// MARK: - Properties
 	
-	let model: NaverSearchBookModel
+	var model: NaverSearchBookModel
 	
 	// MARK: - Init
 	
 	init(model: NaverSearchBookModel) {
 		self.model = model
+
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -50,19 +51,19 @@ extension NaverSearchBookDetailViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		print("viewDidLoad")
 		self.title = "Book Detail"
 		view.backgroundColor = .systemBackground
 		modifyLeftBarButtonItem()
-		
+
 		setupUI()
 		setupLayout()
 		
-		print("viewDidLoad")
+		self.model.naverSearchBookDetailDelegate = self
 	}
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
-		print("viewDidLayoutSubviews - \(bookImageView.frame)")
 	}
 	
 	// MARK: -
@@ -191,12 +192,18 @@ extension NaverSearchBookDetailViewController {
 		bookContentStackView.trailingAnchor.constraint(
 			equalTo: bookContentScrollView.trailingAnchor)
 		.isActive = true
-		bookContentStackView.centerXAnchor.constraint(
-			equalTo: bookContentScrollView.centerXAnchor)
-		.isActive = true
 		bookContentStackView.widthAnchor.constraint(
 			equalTo: bookContentScrollView.widthAnchor)
 		.isActive = true
+	}
+	
+	// MARK: - NaverSearchBookDetailDelegate
+	
+	func reloadImage(image: UIImage) {
+		DispatchQueue.main.async {
+			print("NaverSearchBookDetailDelegate - reloadImage")
+			self.bookImageView.image = image
+		}
 	}
 	
 	// MARK: - objc func
@@ -216,10 +223,13 @@ extension NaverSearchBookDetailViewController {
 	}
 }
 
-//#Preview {
-//	let model = NaverSearchBookModel()
-//	model.sampleBookList()
-//	model.book = model.bookList[0]
-//	return NaverSearchBookDetailViewController(
-//		model: model)
-//}
+#Preview {
+	let model = NaverSearchBookModel()
+	let vc = NaverSearchBookDetailViewController(
+		model: model)
+	vc.model.naverSearchBookDetailDelegate = vc
+	vc.model.sampleBookList()
+	vc.model.book = model.bookList[0]
+	return vc
+}
+
