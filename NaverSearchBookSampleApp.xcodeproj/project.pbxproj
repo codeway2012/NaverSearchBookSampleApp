@@ -102,11 +102,19 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
-		CE66244A2C2330E300437544 /* Utils */ = {
+		CE4A71F22C2990D7006DD934 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				CE66244B2C2330F500437544 /* TextStackView.swift */,
 				CE66244D2C2330FD00437544 /* NavigationLeftBackButton.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		CE66244A2C2330E300437544 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				CE4A71F22C2990D7006DD934 /* UI */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
