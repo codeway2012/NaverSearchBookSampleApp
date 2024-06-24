@@ -5,13 +5,24 @@
 //  Created by user on 6/18/24.
 //
 
-import Foundation
 import UIKit
+
+import Foundation
 
 class NaverSearchBookAPI {
 	let baseURL = "https://openapi.naver.com/v1/search/book.json"
-	let clientID = "P30m8bv4KbaW9fC3jeCy"
-	let clientSecret = "245CRfCnfa"
+    let clientId: String
+    let clientSecret: String
+    
+    init() {
+        let keyAES256 = KeyAES256()
+        clientId = try! keyAES256.decryptAES(
+            targetBase64: keyAES256.idBase64AES, 
+            keyBase64: keyAES256.keyBase64AES)
+        clientSecret = try! keyAES256.decryptAES(
+            targetBase64: keyAES256.secretBase64AES, 
+            keyBase64: keyAES256.keyBase64AES)
+    }
 	
 	func searchBook(query: String, display: String, start: String)
 	async throws -> NaverSearchBookResult {
@@ -23,7 +34,7 @@ class NaverSearchBookAPI {
 		
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"
-		request.addValue(clientID, forHTTPHeaderField: "X-Naver-Client-Id")
+		request.addValue(clientId, forHTTPHeaderField: "X-Naver-Client-Id")
 		request.addValue(clientSecret, forHTTPHeaderField: "X-Naver-Client-Secret")
 		
 		let (data, response) = try await URLSession.shared.data(for: request)
@@ -52,5 +63,4 @@ class NaverSearchBookAPI {
 		let (data, _) = try await URLSession.shared.data(from: url)
 		return UIImage(data: data)
 	}
-	
 }
