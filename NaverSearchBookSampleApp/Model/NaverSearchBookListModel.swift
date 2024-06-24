@@ -7,26 +7,6 @@
 
 import UIKit
 
-// MARK: - Decodable
-
-struct NaverSearchBookResult: Decodable {
-	let lastBuildDate: String
-	let total, start, display: Int
-	let items: [Item]
-	
-	struct Item: Decodable {
-		let title: String
-		let link: String
-		let image: String
-		let author, discount, publisher, pubdate: String
-		let isbn, description: String
-	}
-}
-
-struct NaverSearchError: Decodable, Error  {
-	let errorMessage: String
-	let errorCode: String
-}
 
 // MARK: - Entity
 
@@ -44,7 +24,7 @@ struct NaverSearchBookAPIParams {
 }
 
 // MARK: - Model Class
-class NaverSearchBookModel {
+class NaverSearchBookListModel {
 	
 	// MARK: - Properties
 	
@@ -82,7 +62,7 @@ class NaverSearchBookModel {
 						.reloadTableCell(index: index)
 				}
 			}
-		} catch let error as NaverSearchError {
+		} catch let error as NaverSearchErrorResult {
 			print("message: \(error.errorMessage), code: \(error.errorCode)")
 		} catch {
 			print("error: \(error)")
@@ -97,7 +77,7 @@ class NaverSearchBookModel {
 }
 
 // MARK: - SampleData
-extension NaverSearchBookModel {
+extension NaverSearchBookListModel {
 	func sampleBookList() -> Void {
 		guard let fileUrl = Bundle.main
 			.url(forResource: "SampleJSON", withExtension: "json") else {
@@ -125,7 +105,7 @@ extension NaverSearchBookModel {
 					}
 				}
 			}
-		} catch let error as NaverSearchError {
+		} catch let error as NaverSearchErrorResult {
 			print("message: \(error.errorMessage), code: \(error.errorCode)")
 		} catch {
 			print("error: \(error)")

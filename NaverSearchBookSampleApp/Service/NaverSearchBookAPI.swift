@@ -55,7 +55,7 @@ class NaverSearchBookAPI {
 			let bookResponse = try JSONDecoder().decode(NaverSearchBookResult.self, from: data)
 			return bookResponse
 		} else {
-			let errorResponse = try JSONDecoder().decode(NaverSearchError.self, from: data)
+			let errorResponse = try JSONDecoder().decode(NaverSearchErrorResult.self, from: data)
 			throw errorResponse
 		}
 		

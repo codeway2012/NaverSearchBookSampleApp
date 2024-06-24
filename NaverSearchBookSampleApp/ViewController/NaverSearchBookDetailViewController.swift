@@ -29,11 +29,11 @@ class NaverSearchBookDetailViewController: UIViewController, NaverSearchBookDeta
 	
 	// MARK: - Properties
 	
-	var model: NaverSearchBookModel
+	var model: NaverSearchBookListModel
 	
 	// MARK: - Init
 	
-	init(model: NaverSearchBookModel) {
+	init(model: NaverSearchBookListModel) {
 		self.model = model
 
 		super.init(nibName: nil, bundle: nil)
@@ -224,7 +224,7 @@ extension NaverSearchBookDetailViewController {
 }
 
 #Preview {
-	let model = NaverSearchBookModel()
+	let model = NaverSearchBookListModel()
 	let vc = NaverSearchBookDetailViewController(
 		model: model)
 	vc.model.naverSearchBookDetailDelegate = vc

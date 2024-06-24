@@ -22,7 +22,7 @@ class NaverSearchBookListViewController:
 
 	// MARK: - Properties
 	
-	let model = NaverSearchBookModel()
+	let model = NaverSearchBookListModel()
 	var searchQuery = "프로그래밍"
 }
 
