@@ -11,7 +11,6 @@ class TextStackView: UIStackView {
 	private let titleLabel = UILabel()
 	private let contentTextView = UITextView()
 	
-	// 초기화 메서드
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		setupView()
@@ -22,14 +21,12 @@ class TextStackView: UIStackView {
 		setupView()
 	}
 	
-	// 커스텀 초기화 메서드
 	convenience init(title: String, content: String) {
 		self.init(frame: .zero)
 		setTitle(title)
 		setContent(content)
 	}
 	
-	// UIStackView 설정
 	private func setupView() {
 		axis = .vertical
 		spacing = 5
@@ -48,13 +45,11 @@ class TextStackView: UIStackView {
 		contentTextView.isEditable = false
 		contentTextView.isSelectable = true
 	}
-	
-	// 제목 설정
+
 	func setTitle(_ title: String) {
 		titleLabel.text = title
 	}
 	
-	// 내용 설정
 	func setContent(_ content: String) {
 		contentTextView.text = content
 	}
