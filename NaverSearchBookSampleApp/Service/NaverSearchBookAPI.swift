@@ -11,17 +11,21 @@ import Foundation
 
 class NaverSearchBookAPI {
 	let baseURL = "https://openapi.naver.com/v1/search/book.json"
-    let clientId: String
-    let clientSecret: String
+    let clientId: String?
+    let clientSecret: String?
     
     init() {
         let keyAES256 = KeyAES256()
-        clientId = try! keyAES256.decryptAES(
-            targetBase64: keyAES256.idBase64AES, 
+        self.clientId = try? keyAES256.decryptAES(
+            targetBase64: keyAES256.idBase64AES,
             keyBase64: keyAES256.keyBase64AES)
-        clientSecret = try! keyAES256.decryptAES(
-            targetBase64: keyAES256.secretBase64AES, 
+        self.clientSecret = try? keyAES256.decryptAES(
+            targetBase64: keyAES256.secretBase64AES,
             keyBase64: keyAES256.keyBase64AES)
+        
+        if clientId == nil || clientSecret == nil {
+            print("Failed to decrypt clientId or clientSecret")
+        }
     }
 	
 	func searchBook(query: String, display: String, start: String)
@@ -34,8 +38,8 @@ class NaverSearchBookAPI {
 		
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"
-		request.addValue(clientId, forHTTPHeaderField: "X-Naver-Client-Id")
-		request.addValue(clientSecret, forHTTPHeaderField: "X-Naver-Client-Secret")
+		request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
+		request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
 		
 		let (data, response) = try await URLSession.shared.data(for: request)
 		
