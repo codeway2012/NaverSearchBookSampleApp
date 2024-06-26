@@ -24,10 +24,10 @@ class NaverSearchBookListModel {
     
     func searchBookList(query: String) {
         print("Model searchBookList")
-        Task { await requestData(query: query) }
+        Task { await requestNaverSearchBook(query: query) }
     }
     
-    private func requestData(query: String) async {
+    private func requestNaverSearchBook(query: String) async {
         let resultBookList: NaverSearchBookResult
         switch await naverSearchBookAPI.searchBook(query: query) {
             case .success(let data):
