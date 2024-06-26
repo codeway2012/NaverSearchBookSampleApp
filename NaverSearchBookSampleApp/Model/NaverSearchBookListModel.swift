@@ -24,10 +24,13 @@ class NaverSearchBookListModel {
     
     func searchBookList(query: String) {
         print("Model searchBookList")
-        Task { await requestNaverSearchBook(query: query) }
+        Task {
+            await refreshTableWithRequestedBookList(query: query)
+            await refreshCellsWithDownloadedImages()
+        }
     }
     
-    private func requestNaverSearchBook(query: String) async {
+    private func refreshTableWithRequestedBookList(query: String) async {
         let resultBookList: NaverSearchBookResult
         switch await naverSearchBookAPI.searchBook(query: query) {
             case .success(let data):
@@ -38,7 +41,6 @@ class NaverSearchBookListModel {
         }
         self.bookList = resultBookList.items.map { Book($0) }
         naverSearchBookListDelegate?.reloadTable()
-        await refreshCellsWithDownloadedImages()
     }
     
     private func refreshCellsWithDownloadedImages() async {
