@@ -19,7 +19,7 @@ struct Book {
     let description: String
     var mainTitle: String
     var subTitle: String
-    var image: UIImage
+    var image: UIImage = UIImage(systemName: "photo")!
     
     init(_ item: NaverSearchBookResult.Item) {
         self.title = item.title
@@ -44,8 +44,5 @@ struct Book {
             self.mainTitle = item.title
             self.subTitle = ""
         }
-        
-        self.image = UIImage(systemName: "photo") ?? UIImage()
     }
-    
 }

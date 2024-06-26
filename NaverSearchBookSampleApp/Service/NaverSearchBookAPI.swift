@@ -28,43 +28,62 @@ class NaverSearchBookAPI {
         }
     }
 	
-	func searchBook(query: String, display: String, start: String)
-	async throws -> NaverSearchBookResult {
-		let urlString = "\(baseURL)?query=\(query)&display=\(display)&start=\(start)"
-		
-		guard let url = URL(string: urlString) else {
-			throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-		}
+	func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 10)
+	async -> Result<NaverSearchBookResult, APIRequestError> {
+        guard var components = URLComponents(string: baseURL) else {
+            return .failure(.invalidURL)
+        }
+        
+        components.queryItems = [
+            URLQueryItem(name: "query", value: query),
+            URLQueryItem(name: "start", value: String((page - 1) * itemsPerPage + 1)),
+            URLQueryItem(name: "display", value: String(itemsPerPage))
+        ]
+        
+        guard let url = components.url else {
+            return .failure(.invalidURL)
+        }
 		
 		var request = URLRequest(url: url)
 		request.httpMethod = "GET"
 		request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
 		request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
 		
-		let (data, response) = try await URLSession.shared.data(for: request)
+        let data: Data, response: URLResponse
+        do {
+            (data, response) = try await URLSession.shared.data(for: request)
+        } catch {
+            return .failure(.requestFailed(error))
+        }
 		
-		guard let httpResponse = response as? HTTPURLResponse else {
-			throw NSError(
-				domain: "HTTP Error",
-				code: (response as? HTTPURLResponse)?.statusCode ?? 0,
-				userInfo: nil
-			)
-		}
-		
-		if (200...299).contains(httpResponse.statusCode) {
-			let bookResponse = try JSONDecoder().decode(NaverSearchBookResult.self, from: data)
-			return bookResponse
-		} else {
-			let errorResponse = try JSONDecoder().decode(NaverSearchErrorResult.self, from: data)
-			throw errorResponse
-		}
-		
-	}
+        guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+            return .failure(.invalidResponse)
+        }
+        
+        if (200...299).contains(statusCode) {
+            do {
+                return .success(try NaverSearchBookResult(data: data))
+            } catch {
+                return .failure(.successDataDecodingFailed(error))
+            }
+        } else {
+            do {
+                return .failure(.naverAPIError(statusCode: statusCode, result: try NaverSearchErrorResult(data: data)))
+            } catch {
+                return .failure(.errorDataDecodingFailed(error))
+            }
+        }
+    }
 	
 	func downloadImage(_ imageLink: String)
-	async throws -> UIImage? {
+	async -> UIImage? {
 		guard let url = URL(string: imageLink) else { return nil }
-		let (data, _) = try await URLSession.shared.data(from: url)
-		return UIImage(data: data)
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)
+        } catch {
+            print(APIRequestError.dataDecodingFailed(error).localizedDescription)
+            return UIImage()
+        }
 	}
 }

@@ -7,22 +7,6 @@
 
 import UIKit
 
-
-// MARK: - Entity
-
-struct NaverSearchBookAPIParams {
-	let query: String
-	let display: String
-	let start: String
-	
-	init(query: String,
-		 display: String = "20", start: String = "1") {
-		self.query = query
-		self.display = display
-		self.start = start
-	}
-}
-
 // MARK: - Model Class
 class NaverSearchBookListModel {
 	
@@ -38,79 +22,59 @@ class NaverSearchBookListModel {
 	
 	func searchBookList(query: String) {
 		print("Model searchBookList")
-		Task { await requestData(params: NaverSearchBookAPIParams(query: query)) }
+		Task { await requestData(query: query) }
 	}
 	
-	private func requestData(params: NaverSearchBookAPIParams) async {
-		do {
-			self.bookList = []
-			
-			let naverSearchBookResult = try await naverSearchBookAPI
-				.searchBook(
-					query: params.query,
-					display: params.display,
-					start: params.start
-				)
-			self.bookList = naverSearchBookResult.items.map { Book($0) }
-			naverSearchBookListDelegate?.reloadTable()
-			
-			Task {
-				for (index, value) in bookList.enumerated() {
-					bookList[index].image = try await naverSearchBookAPI
-						.downloadImage(value.imageLink) ?? bookList[index].image
-					naverSearchBookListDelegate?
-						.reloadTableCell(index: index)
-				}
-			}
-		} catch let error as NaverSearchErrorResult {
-			print("message: \(error.errorMessage), code: \(error.errorCode)")
-		} catch {
-			print("error: \(error)")
-		}
+	private func requestData(query: String) async {
+        self.bookList = []
+        
+        let naverSearchBookResult = await naverSearchBookAPI
+            .searchBook(query: query)
+        
+        let resultBookList: NaverSearchBookResult
+        switch naverSearchBookResult {
+            case .success(let result):
+                resultBookList = result
+            case .failure(let error):
+                print("NaverSearchBookListModel requestData Error: \(error.localizedDescription)")
+                return
+        }
+        
+        self.bookList = resultBookList.items.map { Book($0) }
+        naverSearchBookListDelegate?.reloadTable()
+        
+        for (index, value) in bookList.enumerated() {
+            bookList[index].image = await naverSearchBookAPI
+                .downloadImage(value.imageLink) ?? bookList[index].image
+            naverSearchBookListDelegate?
+                .reloadTableCell(index: index)
+        }
 	}
 	
 	func naverSearchBookListCount() -> Int {
-		NSLog("Model naverSearchBookListCount - \(bookList.count)")
+		print("Model naverSearchBookListCount - \(bookList.count)")
 		return bookList.count
 	}
-	
 }
 
-// MARK: - SampleData
+// TODO: - SampleData
 extension NaverSearchBookListModel {
-	func sampleBookList() -> Void {
+	func sampleBookList() -> [Book] {
 		guard let fileUrl = Bundle.main
 			.url(forResource: "SampleJSON", withExtension: "json") else {
-			print("파일을 찾을 수 없습니다.")
-			return
+			print("SampleJSON.json 파일을 찾을 수 없습니다.")
+			return [Book]()
 		}
 		
-		do {
-			let naverSearchBookResultData = try Data(contentsOf: fileUrl)
-			let naverSearchBookResult = try JSONDecoder()
-				.decode(NaverSearchBookResult.self, from: naverSearchBookResultData)
-	
-			self.bookList = naverSearchBookResult.items.map { Book($0) }
-			naverSearchBookListDelegate?.reloadTable()
-			
-			Task {
-				for (index, value) in bookList.enumerated() {
-					bookList[index].image = try await naverSearchBookAPI
-						.downloadImage(value.imageLink) ?? bookList[index].image
-					naverSearchBookListDelegate?
-						.reloadTableCell(index: index)
-					if index == 0 {
-						naverSearchBookDetailDelegate?
-							.reloadImage(image: bookList[index].image)
-					}
-				}
-			}
-		} catch let error as NaverSearchErrorResult {
-			print("message: \(error.errorMessage), code: \(error.errorCode)")
-		} catch {
-			print("error: \(error)")
-		}
-		
+        do {
+            let naverSearchBookResultData = try Data(contentsOf: fileUrl)
+            let naverSearchBookResult = try JSONDecoder()
+                .decode(NaverSearchBookResult.self, from: naverSearchBookResultData)
+            return naverSearchBookResult.items.map( { Book($0) } )
+        } catch {
+            print(APIRequestError.successDataDecodingFailed(error))
+            return [Book]()
+        }
 	}
 }
 

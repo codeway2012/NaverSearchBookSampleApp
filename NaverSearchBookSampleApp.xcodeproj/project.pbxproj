@@ -27,6 +27,7 @@
 		CE8E8EC32C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8EC22C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift */; };
 		CE8E8ED12C21B6260025D96C /* NaverSearchBookListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8ED02C21B6260025D96C /* NaverSearchBookListModel.swift */; };
 		CE8E8ED32C21B6850025D96C /* NaverSearchBookAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E8ED22C21B6850025D96C /* NaverSearchBookAPI.swift */; };
+		CEC1A02C2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		CE8E8EC22C21AD5C0025D96C /* NaverSearchBookSampleAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookSampleAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		CE8E8ED02C21B6260025D96C /* NaverSearchBookListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookListModel.swift; sourceTree = "<group>"; };
 		CE8E8ED22C21B6850025D96C /* NaverSearchBookAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookAPI.swift; sourceTree = "<group>"; };
+		CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookDetailModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +103,8 @@
 		CE4A71F12C298E5F006DD934 /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				CE8E8ED22C21B6850025D96C /* NaverSearchBookAPI.swift */,
 				CE4A71F32C29B2AC006DD934 /* KeyAES256.swift */,
+				CE8E8ED22C21B6850025D96C /* NaverSearchBookAPI.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -182,9 +184,10 @@
 			isa = PBXGroup;
 			children = (
 				CE6611162C23C99B0037AEE5 /* SampleJSON.json */,
-				CE8E8ED02C21B6260025D96C /* NaverSearchBookListModel.swift */,
-				CE4A71F52C29C50C006DD934 /* NaverSearchResult.swift */,
 				CE4A71EF2C298DF2006DD934 /* Book.swift */,
+				CE4A71F52C29C50C006DD934 /* NaverSearchResult.swift */,
+				CE8E8ED02C21B6260025D96C /* NaverSearchBookListModel.swift */,
+				CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -192,10 +195,10 @@
 		CE8E8ED42C21C0D30025D96C /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				CE66244F2C233BA000437544 /* NaverSearchBookDelegate.swift */,
 				CE8E8EA32C21AD5A0025D96C /* NaverSearchBookListViewController.swift */,
 				CE6624462C22B16200437544 /* NaverSearchBookDetailViewController.swift */,
 				CE6624482C232CEC00437544 /* NaverSearchBookWebViewController.swift */,
-				CE66244F2C233BA000437544 /* NaverSearchBookDelegate.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEC1A02C2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift in Sources */,
 				CE6624492C232CEC00437544 /* NaverSearchBookWebViewController.swift in Sources */,
 				CE4A71F42C29B2AC006DD934 /* KeyAES256.swift in Sources */,
 				CE8E8EA42C21AD5A0025D96C /* NaverSearchBookListViewController.swift in Sources */,
