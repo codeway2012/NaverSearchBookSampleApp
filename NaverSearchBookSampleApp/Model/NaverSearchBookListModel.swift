@@ -16,7 +16,11 @@ class NaverSearchBookListModel {
     var naverSearchBookListDelegate: NaverSearchBookListDelegate?
     var bookList: [Book] = []
     
-    // MARK: - Func
+    // MARK: - Methods
+    func naverSearchBookListCount() -> Int {
+        print("Model naverSearchBookListCount - \(bookList.count)")
+        return bookList.count
+    }
     
     func searchBookList(query: String) {
         print("Model searchBookList")
@@ -24,10 +28,7 @@ class NaverSearchBookListModel {
     }
     
     private func requestData(query: String) async {
-        self.bookList = []
-        
-        let naverSearchBookResult = await naverSearchBookAPI
-            .searchBook(query: query)
+        let naverSearchBookResult = await naverSearchBookAPI.searchBook(query: query)
         
         let resultBookList: NaverSearchBookResult
         switch naverSearchBookResult {
@@ -40,18 +41,16 @@ class NaverSearchBookListModel {
         
         self.bookList = resultBookList.items.map { Book($0) }
         naverSearchBookListDelegate?.reloadTable()
-        
+        await downloadImageReloadCell()
+    }
+    
+    private func downloadImageReloadCell() async {
         for (index, value) in bookList.enumerated() {
             if let downloadedImage = await naverSearchBookAPI.downloadImage(value.imageLink) {
                 bookList[index].image = downloadedImage
                 naverSearchBookListDelegate?.reloadTableCell(index: index)
             }
         }
-    }
-    
-    func naverSearchBookListCount() -> Int {
-        print("Model naverSearchBookListCount - \(bookList.count)")
-        return bookList.count
     }
 }
 

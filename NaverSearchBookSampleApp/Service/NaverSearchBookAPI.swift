@@ -28,7 +28,7 @@ class NaverSearchBookAPI {
         }
     }
     
-    func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 10)
+    func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 100)
     async -> Result<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return .failure(.invalidURL)
