@@ -8,6 +8,6 @@
 import UIKit
 
 protocol NaverSearchBookListDelegate {
-    func reloadTable()
-    func reloadTableCell(index: Int)
+    @MainActor func reloadTable()
+    @MainActor func reloadTableCell(index: Int)
 }

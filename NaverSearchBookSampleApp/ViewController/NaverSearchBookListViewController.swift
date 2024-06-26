@@ -164,17 +164,13 @@ extension NaverSearchBookListViewController {
     // MARK: - NaverSearchBookListDelegate
     
     func reloadTable() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            print("reloadTable")
-        }
+        self.tableView.reloadData()
+        print("reloadTable")
     }
     
     func reloadTableCell(index: Int) {
-        DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            print("reloadTableCell - \(index)")
-        }
+        self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        print("reloadTableCell - \(index)")
     }
     
 }

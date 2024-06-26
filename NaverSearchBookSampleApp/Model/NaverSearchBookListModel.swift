@@ -40,14 +40,14 @@ class NaverSearchBookListModel {
                 return
         }
         self.bookList = resultBookList.items.map { Book($0) }
-        naverSearchBookListDelegate?.reloadTable()
+        await naverSearchBookListDelegate?.reloadTable()
     }
     
     private func refreshCellsWithDownloadedImages() async {
         for (index, value) in bookList.enumerated() {
             if let downloadedImage = await naverSearchBookAPI.downloadImage(value.imageLink) {
                 bookList[index].image = downloadedImage
-                naverSearchBookListDelegate?.reloadTableCell(index: index)
+                await naverSearchBookListDelegate?.reloadTableCell(index: index)
             }
         }
     }
