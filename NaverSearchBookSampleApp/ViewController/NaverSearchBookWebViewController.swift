@@ -17,11 +17,11 @@ class NaverSearchBookWebViewController: UIViewController {
 	
 	// MARK: - Properties
 	
-	let model: NaverSearchBookListModel
+	let model: NaverSearchBookDetailModel
 
 	// MARK: - Init
 	
-	init(model: NaverSearchBookListModel) {
+	init(model: NaverSearchBookDetailModel) {
 		self.model = model
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -64,9 +64,7 @@ extension NaverSearchBookWebViewController {
 }
 
 #Preview {
-	let model = NaverSearchBookListModel()
-	model.sampleBookList()
-	model.book = model.bookList[0]
-	return NaverSearchBookWebViewController(
-		model: model)
+	let model = NaverSearchBookDetailModel()
+    model.book = NaverSearchBookListModel.sampleBookList()[0]
+	return NaverSearchBookWebViewController(model: model)
 }

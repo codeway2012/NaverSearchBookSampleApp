@@ -56,9 +56,9 @@ enum APIRequestError: LocalizedError {
             case .naverAPIError(let statusCode, let result):
                 return "Naver API 에러: statusCode - \(statusCode), errorCode - \(result.errorCode), errorMessage - \(result.errorMessage)"
             case .successDataDecodingFailed(let error):
-                return "정상코드의 데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
+                return "정상 코드의 데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
             case .errorDataDecodingFailed(let error):
-                return "에러코드의 데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
+                return "에러 코드의 데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
             case .dataDecodingFailed(let error):
                 return "데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
         }

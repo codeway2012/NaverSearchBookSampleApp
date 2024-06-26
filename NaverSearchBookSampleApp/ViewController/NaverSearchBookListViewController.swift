@@ -91,11 +91,12 @@ extension NaverSearchBookListViewController {
 	// MARK: - method
 	
 	func navigationPushDetailVC(index: Int) {
-		model.book = model.bookList[index]
-		guard let book = model.book else { return }
+        let detailModel = NaverSearchBookDetailModel()
+        detailModel.book = model.bookList[index]
+		guard let book = detailModel.book else { return }
 		print("Selected book title: \(book.mainTitle)")
 		
-		let vc = NaverSearchBookDetailViewController(model: model)
+		let vc = NaverSearchBookDetailViewController(model: detailModel)
 		navigationController?.pushViewController(
 			vc, animated: false)
 	}
@@ -122,7 +123,7 @@ extension NaverSearchBookListViewController {
 		let book = model.bookList[indexPath.row]
 		
 		var config = cell.defaultContentConfiguration()
-		config.image = book.image
+        config.image = book.image
 		config.text = book.mainTitle
 		config.secondaryText = book.subTitle
 		config.imageProperties

@@ -11,7 +11,3 @@ protocol NaverSearchBookListDelegate {
 	func reloadTable()
 	func reloadTableCell(index: Int)
 }
-
-protocol NaverSearchBookDetailDelegate {
-	func reloadImage(image: UIImage)
-}

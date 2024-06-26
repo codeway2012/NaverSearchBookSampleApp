@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Declaration
-class NaverSearchBookDetailViewController: UIViewController, NaverSearchBookDetailDelegate {
+class NaverSearchBookDetailViewController: UIViewController {
 
 	// MARK: - UIComponent
 	
@@ -29,11 +29,11 @@ class NaverSearchBookDetailViewController: UIViewController, NaverSearchBookDeta
 	
 	// MARK: - Properties
 	
-	var model: NaverSearchBookListModel
+	var model: NaverSearchBookDetailModel
 	
 	// MARK: - Init
 	
-	init(model: NaverSearchBookListModel) {
+	init(model: NaverSearchBookDetailModel) {
 		self.model = model
 
 		super.init(nibName: nil, bundle: nil)
@@ -58,8 +58,6 @@ extension NaverSearchBookDetailViewController {
 
 		setupUI()
 		setupLayout()
-		
-		self.model.naverSearchBookDetailDelegate = self
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -224,12 +222,8 @@ extension NaverSearchBookDetailViewController {
 }
 
 #Preview {
-	let model = NaverSearchBookListModel()
-	let vc = NaverSearchBookDetailViewController(
-		model: model)
-	vc.model.naverSearchBookDetailDelegate = vc
-	vc.model.sampleBookList()
-	vc.model.book = model.bookList[0]
-	return vc
+    let model = NaverSearchBookDetailModel()
+    model.book = NaverSearchBookListModel.sampleBookList()[0]
+    return NaverSearchBookDetailViewController(model: model)
 }
 

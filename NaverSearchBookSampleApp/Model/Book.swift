@@ -22,6 +22,8 @@ struct Book {
     var image: UIImage = UIImage(systemName: "photo")!
     
     init(_ item: NaverSearchBookResult.Item) {
+        let titles = Book.splitTitle(title: item.title)
+        
         self.title = item.title
         self.link = item.link
         self.imageLink = item.image
@@ -31,18 +33,21 @@ struct Book {
         self.pubdate = item.pubdate
         self.isbn = item.isbn
         self.description = item.description
-        
-        if let range = item.title.range(of: " (") {
-            self.mainTitle = String(item.title[..<range.lowerBound])
-            self.subTitle = String(item.title[range.lowerBound...])
+        self.mainTitle = titles.0
+        self.subTitle = titles.1
+    }
+    
+    private static func splitTitle(title: String) -> (String, String) {
+        if let range = title.range(of: " (") {
+            let mainTitle = String(title[..<range.lowerBound])
+            var subTitle = String(title[range.lowerBound...])
             
-            let text = self.subTitle
-            let startIndex = text.index(text.startIndex, offsetBy: 2)
-            let endIndex = text.index(text.endIndex, offsetBy: -1)
-            self.subTitle = String(text[startIndex..<endIndex])
+            let startIndex = subTitle.index(subTitle.startIndex, offsetBy: 2)
+            let endIndex = subTitle.index(subTitle.endIndex, offsetBy: -1)
+            subTitle = String(subTitle[startIndex..<endIndex])
+            return (mainTitle, subTitle)
         } else {
-            self.mainTitle = item.title
-            self.subTitle = ""
+            return (title, "")
         }
     }
 }

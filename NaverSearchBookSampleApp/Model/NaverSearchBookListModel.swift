@@ -14,9 +14,7 @@ class NaverSearchBookListModel {
 	
 	var naverSearchBookAPI = NaverSearchBookAPI()
 	var naverSearchBookListDelegate: NaverSearchBookListDelegate?
-	var naverSearchBookDetailDelegate: NaverSearchBookDetailDelegate?
 	var bookList: [Book] = []
-	var book: Book?
 	
 	// MARK: - Func
 	
@@ -57,9 +55,9 @@ class NaverSearchBookListModel {
 	}
 }
 
-// TODO: - SampleData
+// MARK: - SampleData
 extension NaverSearchBookListModel {
-	func sampleBookList() -> [Book] {
+	static func sampleBookList() -> [Book] {
 		guard let fileUrl = Bundle.main
 			.url(forResource: "SampleJSON", withExtension: "json") else {
 			print("SampleJSON.json 파일을 찾을 수 없습니다.")
