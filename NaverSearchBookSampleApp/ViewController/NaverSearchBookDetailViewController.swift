@@ -42,6 +42,10 @@ class NaverSearchBookDetailViewController: UIViewController {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+    
+    deinit {
+        print("deinit - NaverSearchBookDetailViewController")
+    }
 }
 
 // MARK: - UI Setting
@@ -209,15 +213,6 @@ extension NaverSearchBookDetailViewController {
 	@objc func pushWebViewController() {
 		let vc = NaverSearchBookWebViewController(model: model)
 		self.navigationController?.pushViewController(vc, animated: false)
-	}
-	
-	@objc override func leftBarButtonTapped() {
-		if let vc = navigationController?.viewControllers.last,
-		   vc is NaverSearchBookDetailViewController {
-			model.book = nil
-			print("book - \(model.book?.mainTitle ?? "nil")")
-		}
-		super.leftBarButtonTapped()
 	}
 }
 

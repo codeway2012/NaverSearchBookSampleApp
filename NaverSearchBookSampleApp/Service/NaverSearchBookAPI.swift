@@ -83,7 +83,7 @@ class NaverSearchBookAPI {
             return UIImage(data: data)
         } catch {
             print(APIRequestError.dataDecodingFailed(error).localizedDescription)
-            return UIImage()
+            return nil
         }
 	}
 }

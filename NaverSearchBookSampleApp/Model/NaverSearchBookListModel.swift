@@ -42,10 +42,10 @@ class NaverSearchBookListModel {
         naverSearchBookListDelegate?.reloadTable()
         
         for (index, value) in bookList.enumerated() {
-            bookList[index].image = await naverSearchBookAPI
-                .downloadImage(value.imageLink) ?? bookList[index].image
-            naverSearchBookListDelegate?
-                .reloadTableCell(index: index)
+            if let downloadedImage = await naverSearchBookAPI.downloadImage(value.imageLink) {
+                bookList[index].image = downloadedImage
+                naverSearchBookListDelegate?.reloadTableCell(index: index)
+            }
         }
 	}
 	

@@ -121,21 +121,21 @@ extension NaverSearchBookListViewController {
 		let cell = tableView.dequeueReusableCell(
 			withIdentifier: "cell", for: indexPath)
 		let book = model.bookList[indexPath.row]
-		
-		var config = cell.defaultContentConfiguration()
-        config.image = book.image
-		config.text = book.mainTitle
-		config.secondaryText = book.subTitle
-		config.imageProperties
-			.reservedLayoutSize = CGSize(width: 50, height: 80)
-		config.imageProperties
-			.maximumSize = CGSize(width: 50, height: 80)
-		
-		cell.contentConfiguration = config
-		cell.separatorInset = UIEdgeInsets(
-			top: 0, left: 5, bottom: 0, right: 5)
-		return cell
+		return cellConfig(cell: cell, book: book)
 	}
+    
+    private func cellConfig(cell: UITableViewCell, book: Book) -> UITableViewCell {
+        var config = cell.defaultContentConfiguration()
+        config.image = book.image
+        config.text = book.mainTitle
+        config.secondaryText = book.subTitle
+        config.imageProperties.reservedLayoutSize = CGSize(width: 50, height: 80)
+        config.imageProperties.maximumSize = CGSize(width: 50, height: 80)
+        cell.contentConfiguration = config
+        cell.separatorInset = UIEdgeInsets(
+            top: 0, left: 5, bottom: 0, right: 5)
+        return cell
+    }
 	
 	// MARK: - UITableViewDelegate
 	
