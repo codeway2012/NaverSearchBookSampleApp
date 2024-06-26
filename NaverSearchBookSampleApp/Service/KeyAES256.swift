@@ -40,9 +40,9 @@ class KeyAES256 {
     func compareKey (
         clientId: String, originalId: String,
         clientSecret: String, originalSecret: String) {
-        print("clientId decrypt \(clientId == originalId)")
-        print("clientSecret decrypt \(clientSecret == originalSecret)")
-    }
+            print("clientId decrypt \(clientId == originalId)")
+            print("clientSecret decrypt \(clientSecret == originalSecret)")
+        }
     
     private func generateAESKey() -> String {
         let generatedKey = SymmetricKey(size: .bits256)
@@ -60,5 +60,5 @@ class KeyAES256 {
         let encryptedData = sealedBox.combined!
         return encryptedData.base64EncodedString()
     }
-
+    
 }

@@ -9,21 +9,21 @@ import UIKit
 
 // MARK: - Model Class
 class NaverSearchBookListModel {
-	
-	// MARK: - Properties
-	
-	var naverSearchBookAPI = NaverSearchBookAPI()
-	var naverSearchBookListDelegate: NaverSearchBookListDelegate?
-	var bookList: [Book] = []
-	
-	// MARK: - Func
-	
-	func searchBookList(query: String) {
-		print("Model searchBookList")
-		Task { await requestData(query: query) }
-	}
-	
-	private func requestData(query: String) async {
+    
+    // MARK: - Properties
+    
+    var naverSearchBookAPI = NaverSearchBookAPI()
+    var naverSearchBookListDelegate: NaverSearchBookListDelegate?
+    var bookList: [Book] = []
+    
+    // MARK: - Func
+    
+    func searchBookList(query: String) {
+        print("Model searchBookList")
+        Task { await requestData(query: query) }
+    }
+    
+    private func requestData(query: String) async {
         self.bookList = []
         
         let naverSearchBookResult = await naverSearchBookAPI
@@ -47,23 +47,23 @@ class NaverSearchBookListModel {
                 naverSearchBookListDelegate?.reloadTableCell(index: index)
             }
         }
-	}
-	
-	func naverSearchBookListCount() -> Int {
-		print("Model naverSearchBookListCount - \(bookList.count)")
-		return bookList.count
-	}
+    }
+    
+    func naverSearchBookListCount() -> Int {
+        print("Model naverSearchBookListCount - \(bookList.count)")
+        return bookList.count
+    }
 }
 
 // MARK: - SampleData
 extension NaverSearchBookListModel {
-	static func sampleBookList() -> [Book] {
-		guard let fileUrl = Bundle.main
-			.url(forResource: "SampleJSON", withExtension: "json") else {
-			print("SampleJSON.json 파일을 찾을 수 없습니다.")
-			return [Book]()
-		}
-		
+    static func sampleBookList() -> [Book] {
+        guard let fileUrl = Bundle.main
+            .url(forResource: "SampleJSON", withExtension: "json") else {
+            print("SampleJSON.json 파일을 찾을 수 없습니다.")
+            return [Book]()
+        }
+        
         do {
             let naverSearchBookResultData = try Data(contentsOf: fileUrl)
             let naverSearchBookResult = try JSONDecoder()
@@ -73,6 +73,6 @@ extension NaverSearchBookListModel {
             print(APIRequestError.successDataDecodingFailed(error))
             return [Book]()
         }
-	}
+    }
 }
 

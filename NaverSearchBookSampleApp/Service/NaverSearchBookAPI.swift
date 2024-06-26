@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 class NaverSearchBookAPI {
-	let baseURL = "https://openapi.naver.com/v1/search/book.json"
+    let baseURL = "https://openapi.naver.com/v1/search/book.json"
     let clientId: String?
     let clientSecret: String?
     
@@ -27,9 +27,9 @@ class NaverSearchBookAPI {
             print("Failed to decrypt clientId or clientSecret")
         }
     }
-	
-	func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 10)
-	async -> Result<NaverSearchBookResult, APIRequestError> {
+    
+    func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 10)
+    async -> Result<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return .failure(.invalidURL)
         }
@@ -43,19 +43,19 @@ class NaverSearchBookAPI {
         guard let url = components.url else {
             return .failure(.invalidURL)
         }
-		
-		var request = URLRequest(url: url)
-		request.httpMethod = "GET"
-		request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
-		request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
-		
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
+        request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
+        
         let data: Data, response: URLResponse
         do {
             (data, response) = try await URLSession.shared.data(for: request)
         } catch {
             return .failure(.requestFailed(error))
         }
-		
+        
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
             return .failure(.invalidResponse)
         }
@@ -74,10 +74,10 @@ class NaverSearchBookAPI {
             }
         }
     }
-	
-	func downloadImage(_ imageLink: String)
-	async -> UIImage? {
-		guard let url = URL(string: imageLink) else { return nil }
+    
+    func downloadImage(_ imageLink: String)
+    async -> UIImage? {
+        guard let url = URL(string: imageLink) else { return nil }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return UIImage(data: data)
@@ -85,5 +85,5 @@ class NaverSearchBookAPI {
             print(APIRequestError.dataDecodingFailed(error).localizedDescription)
             return nil
         }
-	}
+    }
 }
