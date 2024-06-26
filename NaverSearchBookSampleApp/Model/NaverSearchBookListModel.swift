@@ -28,23 +28,20 @@ class NaverSearchBookListModel {
     }
     
     private func requestData(query: String) async {
-        let naverSearchBookResult = await naverSearchBookAPI.searchBook(query: query)
-        
         let resultBookList: NaverSearchBookResult
-        switch naverSearchBookResult {
-            case .success(let result):
-                resultBookList = result
+        switch await naverSearchBookAPI.searchBook(query: query) {
+            case .success(let data):
+                resultBookList = data
             case .failure(let error):
                 print("NaverSearchBookListModel requestData Error: \(error.localizedDescription)")
                 return
         }
-        
         self.bookList = resultBookList.items.map { Book($0) }
         naverSearchBookListDelegate?.reloadTable()
-        await downloadImageReloadCell()
+        await refreshCellsWithDownloadedImages()
     }
     
-    private func downloadImageReloadCell() async {
+    private func refreshCellsWithDownloadedImages() async {
         for (index, value) in bookList.enumerated() {
             if let downloadedImage = await naverSearchBookAPI.downloadImage(value.imageLink) {
                 bookList[index].image = downloadedImage
