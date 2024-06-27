@@ -189,8 +189,6 @@
 				CE6611162C23C99B0037AEE5 /* SampleJSON.json */,
 				CE4A71EF2C298DF2006DD934 /* Book.swift */,
 				CE4A71F52C29C50C006DD934 /* NaverSearchResult.swift */,
-				CE8E8ED02C21B6260025D96C /* NaverSearchBookListViewModel.swift */,
-				CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -218,6 +216,8 @@
 		CEC1A03C2C2D420B00EED49F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				CE8E8ED02C21B6260025D96C /* NaverSearchBookListViewModel.swift */,
+				CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
