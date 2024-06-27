@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Combine
 import Foundation
 
 class NaverSearchBookAPI {
@@ -85,5 +85,62 @@ class NaverSearchBookAPI {
             print(APIRequestError.dataDecodingFailed(error).localizedDescription)
             return nil
         }
+    }
+    
+    func searchBookCombine(query: String, page: Int = 1, itemsPerPage: Int = 100) -> AnyPublisher<NaverSearchBookResult, APIRequestError> {
+        guard var components = URLComponents(string: baseURL) else {
+            return Fail(error: APIRequestError.invalidURL)
+                .eraseToAnyPublisher()
+        }
+        
+        components.queryItems = [
+            URLQueryItem(name: "query", value: query),
+            URLQueryItem(name: "start", value: String((page - 1) * itemsPerPage + 1)),
+            URLQueryItem(name: "display", value: String(itemsPerPage))
+        ]
+        
+        guard let url = components.url else {
+            return Fail(error: APIRequestError.invalidURL)
+                .eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
+        request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap { data, response in
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+                    throw APIRequestError.invalidResponse
+                }
+                return (data, statusCode)
+            }
+            .tryMap { data, statusCode in
+                if (200...299).contains(statusCode) {
+                    do {
+                        let result = try NaverSearchBookResult(data: data)
+                        return result
+                    } catch {
+                        throw APIRequestError.successDataDecodingFailed(error)
+                    }
+                } else {
+                    do {
+                        let result = try NaverSearchErrorResult(data: data)
+                        throw APIRequestError.naverAPIError(statusCode: statusCode, result: result)
+                    } catch {
+                        throw APIRequestError.errorDataDecodingFailed(error)
+                    }
+                }
+            }
+            .mapError { error -> APIRequestError in
+                if let apiError = error as? APIRequestError {
+                    return apiError
+                } else {
+                    return APIRequestError.unknown(error)
+                }
+            }
+            .eraseToAnyPublisher()
+        
     }
 }
