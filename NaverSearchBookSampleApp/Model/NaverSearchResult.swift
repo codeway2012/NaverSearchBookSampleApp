@@ -44,6 +44,7 @@ enum APIRequestError: LocalizedError {
     case successDataDecodingFailed(Error)
     case errorDataDecodingFailed(Error)
     case dataDecodingFailed(Error)
+    case unknown(Error)
     
     var errorDescription: String? {
         switch self {
@@ -61,6 +62,8 @@ enum APIRequestError: LocalizedError {
                 return "에러 코드의 데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
             case .dataDecodingFailed(let error):
                 return "데이터 디코딩에 실패했습니다: \(error.localizedDescription)"
+            case .unknown(let error) :
+                return "알수 없는 에러 : \(error.localizedDescription)"
         }
     }
 }

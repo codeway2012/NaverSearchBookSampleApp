@@ -6,8 +6,8 @@
 //
 
 import UIKit
-
 import Foundation
+import Combine
 
 class NaverSearchBookAPI {
     let baseURL = "https://openapi.naver.com/v1/search/book.json"
@@ -26,6 +26,52 @@ class NaverSearchBookAPI {
         if clientId == nil || clientSecret == nil {
             print("Failed to decrypt clientId or clientSecret")
         }
+    }
+    
+    func searchBookCombine(query: String, page: Int = 1, itemsPerPage: Int = 100) -> AnyPublisher<NaverSearchBookResult, APIRequestError> {
+        guard var components = URLComponents(string: baseURL) else {
+            return Fail(error: APIRequestError.invalidURL)
+                .eraseToAnyPublisher()
+        }
+        
+        components.queryItems = [
+            URLQueryItem(name: "query", value: query),
+            URLQueryItem(name: "start", value: String((page - 1) * itemsPerPage + 1)),
+            URLQueryItem(name: "display", value: String(itemsPerPage))
+        ]
+        
+        guard let url = components.url else {
+            return Fail(error: APIRequestError.invalidURL)
+                .eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
+        request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap { data, response in
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+                    throw APIRequestError.invalidResponse
+                }
+                return (data, statusCode)
+            }
+            .map { (data, statusCode) -> NaverSearchBookResult in
+                switch statusCode {
+                    case 200...299: NaverSearchBookResult(data: data)
+                    default: NaverSearchErrorResult(data: data)
+                }
+            }
+            .catch { error in
+                if let apiError = error as! APIRequestError {
+                    
+                } else {
+                    return Fail(error: APIRequestError.unknown(error))
+                }
+            }
+            .eraseToAnyPublisher()
+        
     }
     
     func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 100)
