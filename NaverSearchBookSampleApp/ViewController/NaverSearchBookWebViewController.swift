@@ -70,5 +70,5 @@ extension NaverSearchBookWebViewController {
 #Preview {
     let model = NaverSearchBookDetailModel()
     model.book = NaverSearchBookListModel.sampleBookList()[0]
-    return NaverSearchBookWebViewController(model: model)
+    return UINavigationController(rootViewController: NaverSearchBookWebViewController(model: model))
 }
