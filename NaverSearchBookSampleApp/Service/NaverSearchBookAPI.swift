@@ -116,7 +116,7 @@ class NaverSearchBookAPI {
                 }
                 return (data, statusCode)
             }
-            .tryMap { data, statusCode in
+            .tryMap { (data, statusCode) -> NaverSearchBookResult in
                 if (200...299).contains(statusCode) {
                     do {
                         let result = try NaverSearchBookResult(data: data)
