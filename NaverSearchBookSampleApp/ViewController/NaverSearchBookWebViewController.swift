@@ -17,12 +17,12 @@ class NaverSearchBookWebViewController: UIViewController {
     
     // MARK: - Properties
     
-    let model: NaverSearchBookDetailModel
+    let detailViewModel: NaverSearchBookDetailViewModel
     
     // MARK: - Init
     
-    init(model: NaverSearchBookDetailModel) {
-        self.model = model
+    init(detailViewModel: NaverSearchBookDetailViewModel) {
+        self.detailViewModel = detailViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -59,7 +59,7 @@ extension NaverSearchBookWebViewController {
     // MARK: -
     func setupUI() {
         // URL 로드
-        if let urlString = model.book?.link,
+        if let urlString = detailViewModel.book?.link,
            let url = URL(string: urlString) {
             let request = URLRequest(url: url)
             webView.load(request)
@@ -68,7 +68,7 @@ extension NaverSearchBookWebViewController {
 }
 
 #Preview {
-    let model = NaverSearchBookDetailModel()
-    model.book = NaverSearchBookListModel.sampleBookList()[0]
-    return UINavigationController(rootViewController: NaverSearchBookWebViewController(model: model))
+    let detailViewModel = NaverSearchBookDetailViewModel()
+    detailViewModel.book = NaverSearchBookListViewModel.sampleBookList()[0]
+    return UINavigationController(rootViewController: NaverSearchBookWebViewController(detailViewModel: detailViewModel))
 }

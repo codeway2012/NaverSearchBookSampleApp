@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Model Class
-class NaverSearchBookListModel {
+class NaverSearchBookListViewModel {
     
     // MARK: - Properties
     
@@ -54,7 +54,7 @@ class NaverSearchBookListModel {
 }
 
 // MARK: - SampleData
-extension NaverSearchBookListModel {
+extension NaverSearchBookListViewModel {
     static func sampleBookList() -> [Book] {
         guard let fileUrl = Bundle.main
             .url(forResource: "SampleJSON", withExtension: "json") else {

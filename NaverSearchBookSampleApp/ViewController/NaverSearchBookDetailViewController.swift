@@ -12,13 +12,13 @@ class NaverSearchBookDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    let detailModel: NaverSearchBookDetailModel
+    let detailViewModel: NaverSearchBookDetailViewModel
     let detailView = NaverSearchBookDetailView()
     
     // MARK: - Init
     
-    init(model: NaverSearchBookDetailModel) {
-        self.detailModel = model
+    init(detailViewModel: NaverSearchBookDetailViewModel) {
+        self.detailViewModel = detailViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -47,7 +47,7 @@ extension NaverSearchBookDetailViewController {
         view.backgroundColor = .systemBackground
         modifyLeftBarButtonItem()
         
-        detailView.setupUI(book: detailModel.book)
+        detailView.setupUI(book: detailViewModel.book)
         detailViewSetupAction()
         detailView.setupLayout()
     }
@@ -67,14 +67,14 @@ extension NaverSearchBookDetailViewController {
     // MARK: - objc func
     
     @objc func pushWebViewController() {
-        let vc = NaverSearchBookWebViewController(model: detailModel)
+        let vc = NaverSearchBookWebViewController(detailViewModel: detailViewModel)
         self.navigationController?.pushViewController(vc, animated: false)
     }
 }
 
 #Preview {
-    let model = NaverSearchBookDetailModel()
-    model.book = NaverSearchBookListModel.sampleBookList()[0]
-    return UINavigationController(rootViewController: NaverSearchBookDetailViewController(model: model))
+    let detailViewModel = NaverSearchBookDetailViewModel()
+    detailViewModel.book = NaverSearchBookListViewModel.sampleBookList()[0]
+    return UINavigationController(rootViewController: NaverSearchBookDetailViewController(detailViewModel: detailViewModel))
 }
 

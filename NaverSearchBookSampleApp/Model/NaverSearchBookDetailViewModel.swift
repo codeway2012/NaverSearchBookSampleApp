@@ -6,6 +6,6 @@
 //
 
 
-class NaverSearchBookDetailModel {
+class NaverSearchBookDetailViewModel {
     var book: Book?
 }
