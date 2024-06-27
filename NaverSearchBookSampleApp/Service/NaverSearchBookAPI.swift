@@ -57,17 +57,27 @@ class NaverSearchBookAPI {
                 }
                 return (data, statusCode)
             }
-            .map { (data, statusCode) -> NaverSearchBookResult in
-                switch statusCode {
-                    case 200...299: NaverSearchBookResult(data: data)
-                    default: NaverSearchErrorResult(data: data)
+            .tryMap { data, statusCode in
+                if (200...299).contains(statusCode) {
+                    do {
+                        return try NaverSearchBookResult(data: data)
+                    } catch {
+                        throw APIRequestError.successDataDecodingFailed(error)
+                    }
+                } else {
+                    do {
+                        let result = try NaverSearchErrorResult(data: data)
+                        throw APIRequestError.naverAPIError(statusCode: statusCode, result: result)
+                    } catch {
+                        throw APIRequestError.errorDataDecodingFailed(error)
+                    }
                 }
             }
-            .catch { error in
-                if let apiError = error as! APIRequestError {
-                    
+            .mapError { error -> APIRequestError in
+                if let apiError = error as? APIRequestError {
+                    return apiError
                 } else {
-                    return Fail(error: APIRequestError.unknown(error))
+                    return APIRequestError.unknown(error)
                 }
             }
             .eraseToAnyPublisher()
