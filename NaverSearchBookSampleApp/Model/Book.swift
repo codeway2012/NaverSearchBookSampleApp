@@ -19,7 +19,7 @@ struct Book {
     let description: String
     var mainTitle: String
     var subTitle: String
-    var image: UIImage = UIImage(systemName: "photo")!
+    var image: UIImage = UIImage(systemName: "photo.fill")!
     
     init(_ item: NaverSearchBookResult.Item) {
         let titles = Book.splitTitle(title: item.title)

@@ -11,19 +11,19 @@ import Foundation
 
 class NaverSearchBookAPI {
     let baseURL = "https://openapi.naver.com/v1/search/book.json"
-    let clientId: String?
-    let clientSecret: String?
+    let clientId: String
+    let clientSecret: String
     
     init() {
         let keyAES256 = KeyAES256()
-        self.clientId = try? keyAES256.decryptAES(
+        self.clientId = (try? keyAES256.decryptAES(
             targetBase64: keyAES256.idBase64AES,
-            keyBase64: keyAES256.keyBase64AES)
-        self.clientSecret = try? keyAES256.decryptAES(
+            keyBase64: keyAES256.keyBase64AES)) ?? "N/A"
+        self.clientSecret = (try? keyAES256.decryptAES(
             targetBase64: keyAES256.secretBase64AES,
-            keyBase64: keyAES256.keyBase64AES)
+            keyBase64: keyAES256.keyBase64AES)) ?? "N/A"
         
-        if clientId == nil || clientSecret == nil {
+        if clientId == "" || clientSecret == "" {
             print("Failed to decrypt clientId or clientSecret")
         }
     }
@@ -46,8 +46,8 @@ class NaverSearchBookAPI {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
-        request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
+        request.addValue(clientId, forHTTPHeaderField: "X-Naver-Client-Id")
+        request.addValue(clientSecret, forHTTPHeaderField: "X-Naver-Client-Secret")
         
         let data: Data, response: URLResponse
         do {
@@ -106,8 +106,8 @@ class NaverSearchBookAPI {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue(clientId ?? "", forHTTPHeaderField: "X-Naver-Client-Id")
-        request.addValue(clientSecret ?? "", forHTTPHeaderField: "X-Naver-Client-Secret")
+        request.addValue(clientId, forHTTPHeaderField: "X-Naver-Client-Id")
+        request.addValue(clientSecret, forHTTPHeaderField: "X-Naver-Client-Secret")
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .tryMap { data, response in

@@ -17,21 +17,22 @@ class KeyAES256 {
     
     func decryptAES(targetBase64: String, keyBase64: String)
     throws -> String {
-        let data = Data(base64Encoded: targetBase64)!
-        let keyData = Data(base64Encoded: keyBase64)!
-        let key = SymmetricKey(data: keyData)
+        guard let data = Data(base64Encoded: targetBase64),
+              let keyData = Data(base64Encoded: keyBase64) 
+        else { return "N/A" }
         
+        let key = SymmetricKey(data: keyData)
         let sealedBox = try AES.GCM.SealedBox(combined: data)
         let decryptedData = try AES.GCM.open(sealedBox, using: key)
-        return String(data: decryptedData, encoding: .utf8) ?? "N/a"
+        return String(data: decryptedData, encoding: .utf8) ?? "N/A"
     }
     
     // MARK: - key generate, encrypt, encode
     
     func generateBase64AESKey(originalId: String, originalSecret: String) {
         keyBase64AES = generateAESKey()
-        idBase64AES = try! encryptAES(targetString: originalId, keyString: keyBase64AES)
-        secretBase64AES = try! encryptAES(targetString: originalSecret, keyString: keyBase64AES)
+        idBase64AES = encryptAES(targetString: originalId, keyString: keyBase64AES)
+        secretBase64AES = encryptAES(targetString: originalSecret, keyString: keyBase64AES)
         print("keyBase64AES : \(keyBase64AES)")
         print("idBase64AES : \(idBase64AES)")
         print("secretBase64AES : \(secretBase64AES)")
@@ -50,15 +51,13 @@ class KeyAES256 {
         return keyData.base64EncodedString()
     }
     
-    private func encryptAES(targetString: String, keyString: String)
-    throws -> String {
+    private func encryptAES(targetString: String, keyString: String) -> String {
         let data = targetString.data(using: .utf8)!
         let keyData = Data(base64Encoded: keyString)!
         let key = SymmetricKey(data: keyData)
-        
-        let sealedBox = try AES.GCM.seal(data, using: key)
-        let encryptedData = sealedBox.combined!
-        return encryptedData.base64EncodedString()
+        var sealedBox: AES.GCM.SealedBox? = try? AES.GCM.seal(data, using: key)
+        let encryptedData = sealedBox?.combined
+        return encryptedData?.base64EncodedString() ?? "N/A"
     }
     
 }

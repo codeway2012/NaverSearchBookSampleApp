@@ -11,7 +11,6 @@ class NaverSearchBookDetailView: UIView {
 
     // MARK: - UIComponent
     
-
     let bookContentScrollView = UIScrollView()
     let bookContentStackView = UIStackView()
     let bookImageBackgroundStackView = UIStackView()
