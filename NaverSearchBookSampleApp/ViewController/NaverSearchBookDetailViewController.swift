@@ -14,11 +14,12 @@ class NaverSearchBookDetailViewController: UIViewController {
     
     let detailModel: NaverSearchBookDetailModel
     let detailView = NaverSearchBookDetailView()
+    var nextViewController: NaverSearchBookWebViewController?
     
     // MARK: - Init
     
-    init(model: NaverSearchBookDetailModel) {
-        self.detailModel = model
+    init(_ detailModel: NaverSearchBookDetailModel) {
+        self.detailModel = detailModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -47,13 +48,13 @@ extension NaverSearchBookDetailViewController {
         view.backgroundColor = .systemBackground
         modifyLeftBarButtonItem()
         
-        detailView.setupUI(book: detailModel.book)
+        detailView.setupConfig(book: detailModel.book)
         detailViewSetupAction()
-        detailView.setupLayout()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func viewDidAppear(_ animated: Bool) {
+        print("viewDidAppear")
+        loadNextPageWebView()
     }
     
     //MARK: - setup
@@ -64,17 +65,23 @@ extension NaverSearchBookDetailViewController {
             for: .touchUpInside)
     }
     
+    private func loadNextPageWebView() {
+        nextViewController = NaverSearchBookWebViewController()
+        let link = detailModel.book?.link ?? "example.com"
+        nextViewController?.loadURL(link: link)
+    }
+    
     // MARK: - objc func
     
     @objc func pushWebViewController() {
-        let vc = NaverSearchBookWebViewController(model: detailModel)
+        let vc = nextViewController!
         self.navigationController?.pushViewController(vc, animated: false)
     }
 }
 
 #Preview {
-    let model = NaverSearchBookDetailModel()
-    model.book = NaverSearchBookListModel.sampleBookList()[0]
-    return UINavigationController(rootViewController: NaverSearchBookDetailViewController(model: model))
+    let detailModel = NaverSearchBookDetailModel()
+    detailModel.book = NaverSearchBookListModel.sampleBookList()[0]
+    return UINavigationController(rootViewController: NaverSearchBookDetailViewController(detailModel))
 }
 

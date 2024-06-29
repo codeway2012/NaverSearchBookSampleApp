@@ -33,8 +33,7 @@ extension NaverSearchBookListViewController {
         view.backgroundColor = .systemBackground
         self.title = "Book List"
         
-        listView.setupUI(searchBarText: searchQuery)
-        listView.setupLayout()
+        listView.setupConfig(searchBarText: searchQuery)
         
         listView.searchBar.delegate = self
         listView.tableView.delegate = self
@@ -66,7 +65,7 @@ extension NaverSearchBookListViewController {
         guard let book = detailModel.book else { return }
         print("Selected book title: \(book.mainTitle)")
         
-        let vc = NaverSearchBookDetailViewController(model: detailModel)
+        let vc = NaverSearchBookDetailViewController(detailModel)
         navigationController?
             .pushViewController(vc, animated: false)
     }

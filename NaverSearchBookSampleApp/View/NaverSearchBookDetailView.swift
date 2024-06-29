@@ -26,8 +26,23 @@ class NaverSearchBookDetailView: UIView {
     let linkView = TextStackView()
     let linkButton = UIButton(type: .system)
     
-    // MARK: -
-    func setupUI(book: Book?) {
+    // MARK: - Init
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+        setupLayout()
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
         // MARK: bookImageBackgroundView
         addSubview(bookImageBackgroundView)
         bookImageBackgroundView
@@ -38,7 +53,6 @@ class NaverSearchBookDetailView: UIView {
         addSubview(bookImageView)
         bookImageView
             .translatesAutoresizingMaskIntoConstraints = false
-        bookImageView.image = book?.image
         bookImageView.contentMode = .scaleAspectFit
         bookImageView.layer.shadowOpacity = 0.5
         bookImageView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -60,45 +74,25 @@ class NaverSearchBookDetailView: UIView {
         
         bookContentStackView.addArrangedSubview(mainTitleView)
         mainTitleView.setTitle("제목")
-        mainTitleView.setContent(book?.mainTitle ?? "")
-        
-        if (book?.subTitle ?? "" != "") {
-            bookContentStackView.addArrangedSubview(subTitleView)
-            subTitleView.setTitle("부제목")
-            subTitleView.setContent(book?.subTitle ?? "")
-        }
-        
+        bookContentStackView.addArrangedSubview(subTitleView)
+        subTitleView.setTitle("부제목")
         bookContentStackView.addArrangedSubview(authorView)
         authorView.setTitle("저자")
-        authorView.setContent(book?.author ?? "")
-        
         bookContentStackView.addArrangedSubview(discountView)
         discountView.setTitle("최저가")
-        discountView.setContent(book?.discount ?? "")
-        
         bookContentStackView.addArrangedSubview(publisherView)
         publisherView.setTitle("출판사")
-        publisherView.setContent(book?.publisher ?? "")
-        
         bookContentStackView.addArrangedSubview(pubdateView)
         pubdateView.setTitle("출간일")
-        pubdateView.setContent(book?.pubdate ?? "")
-        
         bookContentStackView.addArrangedSubview(isbnView)
         isbnView.setTitle("ISBN")
-        isbnView.setContent(book?.isbn ?? "")
-        
         bookContentStackView.addArrangedSubview(descriptionView)
         descriptionView.setTitle("책 소개")
-        descriptionView.setContent(book?.description ?? "")
-        
         bookContentStackView.addArrangedSubview(linkButton)
         linkButton.setTitle("네이버 도서에서 보기", for: .normal)
-
     }
-    
-    // MARK: -
-    func setupLayout() {
+
+    private func setupLayout() {
         // MARK: bookImageBackgroundView
         bookImageBackgroundView.topAnchor.constraint(
             equalTo: safeAreaLayoutGuide.topAnchor)
@@ -155,5 +149,24 @@ class NaverSearchBookDetailView: UIView {
             equalTo: bookContentScrollView.widthAnchor)
         .isActive = true
     }
-
+    
+    func setupConfig(book: Book?) {
+        // MARK: bookImageView
+        bookImageView.image = book?.image
+        
+        // MARK: bookContentStackView
+        mainTitleView.setContent(book?.mainTitle ?? "")
+        if (book?.subTitle ?? "" != "") {
+            subTitleView.setContent(book?.subTitle ?? "")
+        } else {
+            bookContentStackView.removeArrangedSubview(subTitleView)
+            subTitleView.removeFromSuperview()
+        }
+        authorView.setContent(book?.author ?? "")
+        discountView.setContent(book?.discount ?? "")
+        publisherView.setContent(book?.publisher ?? "")
+        pubdateView.setContent(book?.pubdate ?? "")
+        isbnView.setContent(book?.isbn ?? "")
+        descriptionView.setContent(book?.description ?? "")
+    }
 }

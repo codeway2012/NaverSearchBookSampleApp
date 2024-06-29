@@ -14,20 +14,31 @@ class NaverSearchBookListView: UIView {
     let tableView = UITableView()
     let searchBar = UISearchBar()
     
-    // MARK: - Setup UI
+    // MARK: - init
     
-    func setupUI(searchBarText: String) {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+        setupLayout()
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
         addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.text = searchBarText
         
         addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    // MARK: - Setup Layout
-    
-    func setupLayout() {
+    private func setupLayout() {
         searchBar.topAnchor.constraint(
             equalTo: safeAreaLayoutGuide.topAnchor)
         .isActive = true
@@ -53,4 +64,12 @@ class NaverSearchBookListView: UIView {
             equalTo: trailingAnchor)
         .isActive = true
     }
+    
+    func setupConfig(searchBarText: String) {
+        searchBar.text = searchBarText
+    }
+}
+
+#Preview {
+    NaverSearchBookListView()
 }
