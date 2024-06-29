@@ -11,10 +11,11 @@ class NaverSearchBookDetailView: UIView {
 
     // MARK: - UIComponent
     
-    let bookImageBackgroundView = UIView()
-    let bookImageView = UIImageView()
+
     let bookContentScrollView = UIScrollView()
     let bookContentStackView = UIStackView()
+    let bookImageBackgroundStackView = UIStackView()
+    let bookImageView = ShadowImageView()
     let mainTitleView = TextStackView()
     let subTitleView = TextStackView()
     let authorView = TextStackView()
@@ -43,22 +44,6 @@ class NaverSearchBookDetailView: UIView {
     // MARK: - Setup
     
     private func setupUI() {
-        // MARK: bookImageBackgroundView
-        addSubview(bookImageBackgroundView)
-        bookImageBackgroundView
-            .translatesAutoresizingMaskIntoConstraints = false
-        bookImageBackgroundView.backgroundColor = UIColor.systemGray6
-        
-        // MARK: bookImageView
-        addSubview(bookImageView)
-        bookImageView
-            .translatesAutoresizingMaskIntoConstraints = false
-        bookImageView.contentMode = .scaleAspectFit
-        bookImageView.layer.shadowOpacity = 0.5
-        bookImageView.layer.shadowOffset = CGSize(width: 4, height: 4)
-        bookImageView.layer.shadowRadius = 10
-        bookImageView.layer.shadowPath = nil
-        
         // MARK: bookContentScrollView
         addSubview(bookContentScrollView)
         bookContentScrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -69,8 +54,20 @@ class NaverSearchBookDetailView: UIView {
             .translatesAutoresizingMaskIntoConstraints = false
         bookContentStackView.axis = .vertical
         bookContentStackView.spacing = 20
-        bookContentStackView.isLayoutMarginsRelativeArrangement = true
-        bookContentStackView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        
+        // MARK: bookImageBackgroundView
+        bookContentStackView.addArrangedSubview(bookImageBackgroundStackView)
+        bookImageBackgroundStackView.translatesAutoresizingMaskIntoConstraints = false
+        bookImageBackgroundStackView.backgroundColor = UIColor.systemGray6
+        bookImageBackgroundStackView.distribution = .fillProportionally
+        bookImageBackgroundStackView.isLayoutMarginsRelativeArrangement = true
+        bookImageBackgroundStackView.layoutMargins = UIEdgeInsets(top: 30, left: 0, bottom: 30, right: 0)
+        
+        // MARK: bookImageView
+        addSubview(bookImageView)
+        bookImageView.translatesAutoresizingMaskIntoConstraints = false
+        bookImageView.contentMode = .scaleAspectFit
+        bookImageView.setupShadow(opacity: 0.5, offset: CGSize(width: 10, height: 10), radius: 10)
         
         bookContentStackView.addArrangedSubview(mainTitleView)
         mainTitleView.setTitle("제목")
@@ -93,45 +90,20 @@ class NaverSearchBookDetailView: UIView {
     }
 
     private func setupLayout() {
-        // MARK: bookImageBackgroundView
-        bookImageBackgroundView.topAnchor.constraint(
-            equalTo: safeAreaLayoutGuide.topAnchor)
-        .isActive = true
-        bookImageBackgroundView.centerXAnchor.constraint(
-            equalTo: centerXAnchor)
-        .isActive = true
-        bookImageBackgroundView.widthAnchor.constraint(
-            equalTo: widthAnchor)
-        .isActive = true
-        bookImageBackgroundView.heightAnchor.constraint(
-            equalToConstant: 300)
-        .isActive = true
-        
-        // MARK: bookImageView
-        bookImageView.centerXAnchor.constraint(
-            equalTo: bookImageBackgroundView.centerXAnchor)
-        .isActive = true
-        bookImageView.centerYAnchor.constraint(
-            equalTo: bookImageBackgroundView.centerYAnchor)
-        .isActive = true
-        bookImageView.heightAnchor.constraint(
-            equalToConstant: 220)
-        .isActive = true
-        
         // MARK: bookContentScrollView
         bookContentScrollView.topAnchor.constraint(
-            equalTo: bookImageBackgroundView.bottomAnchor)
+            equalTo: safeAreaLayoutGuide.topAnchor)
         .isActive = true
         bookContentScrollView.bottomAnchor.constraint(
             equalTo: safeAreaLayoutGuide.bottomAnchor)
         .isActive = true
-        bookContentScrollView.centerXAnchor.constraint(
-            equalTo: centerXAnchor)
+        bookContentScrollView.leadingAnchor.constraint(
+            equalTo: leadingAnchor)
         .isActive = true
-        bookContentScrollView.widthAnchor.constraint(
-            equalTo: widthAnchor)
+        bookContentScrollView.trailingAnchor.constraint(
+            equalTo: trailingAnchor)
         .isActive = true
-        
+
         // MARK: bookContentStackView
         bookContentStackView.topAnchor.constraint(
             equalTo: bookContentScrollView.topAnchor)
@@ -147,6 +119,21 @@ class NaverSearchBookDetailView: UIView {
         .isActive = true
         bookContentStackView.widthAnchor.constraint(
             equalTo: bookContentScrollView.widthAnchor)
+        .isActive = true
+        
+        // MARK: bookImageBackgroundView
+        bookImageBackgroundStackView.heightAnchor.constraint(
+            equalToConstant: 260)
+        .isActive = true
+        
+        bookImageView.centerXAnchor.constraint(
+            equalTo: centerXAnchor)
+        .isActive = true
+        bookImageView.centerYAnchor.constraint(
+            equalTo: bookImageBackgroundStackView.centerYAnchor)
+        .isActive = true
+        bookImageView.heightAnchor.constraint(
+            equalToConstant: 200)
         .isActive = true
     }
     
@@ -170,3 +157,4 @@ class NaverSearchBookDetailView: UIView {
         descriptionView.setContent(book?.description ?? "")
     }
 }
+

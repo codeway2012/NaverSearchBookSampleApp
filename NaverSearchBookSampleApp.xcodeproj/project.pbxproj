@@ -29,6 +29,7 @@
 		CEC1A02C2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift */; };
 		CEC1A02F2C2CEE3100EED49F /* NaverSearchBookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC1A02E2C2CEE3100EED49F /* NaverSearchBookListView.swift */; };
 		CEC1A0312C2CEE4300EED49F /* NaverSearchBookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC1A0302C2CEE4300EED49F /* NaverSearchBookDetailView.swift */; };
+		CEC1A0532C3059BE00EED49F /* ShadowImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC1A0522C3059BE00EED49F /* ShadowImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		CEC1A02B2C2BEE5B00EED49F /* NaverSearchBookDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookDetailModel.swift; sourceTree = "<group>"; };
 		CEC1A02E2C2CEE3100EED49F /* NaverSearchBookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookListView.swift; sourceTree = "<group>"; };
 		CEC1A0302C2CEE4300EED49F /* NaverSearchBookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverSearchBookDetailView.swift; sourceTree = "<group>"; };
+		CEC1A0522C3059BE00EED49F /* ShadowImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 		CE4A71F22C2990D7006DD934 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				CEC1A0522C3059BE00EED49F /* ShadowImageView.swift */,
 				CE66244B2C2330F500437544 /* TextStackView.swift */,
 				CE66244D2C2330FD00437544 /* NavigationLeftBackButton.swift */,
 			);
@@ -352,6 +355,7 @@
 				CE8E8ED32C21B6850025D96C /* NaverSearchBookAPI.swift in Sources */,
 				CEC1A0312C2CEE4300EED49F /* NaverSearchBookDetailView.swift in Sources */,
 				CE4A71F02C298DF2006DD934 /* Book.swift in Sources */,
+				CEC1A0532C3059BE00EED49F /* ShadowImageView.swift in Sources */,
 				CE8E8EA02C21AD5A0025D96C /* AppDelegate.swift in Sources */,
 				CEC1A02F2C2CEE3100EED49F /* NaverSearchBookListView.swift in Sources */,
 				CE6624472C22B16200437544 /* NaverSearchBookDetailViewController.swift in Sources */,
