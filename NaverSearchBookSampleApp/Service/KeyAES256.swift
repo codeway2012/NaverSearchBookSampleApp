@@ -52,8 +52,10 @@ class KeyAES256 {
     }
     
     private func encryptAES(targetString: String, keyString: String) -> String {
-        let data = targetString.data(using: .utf8)!
-        let keyData = Data(base64Encoded: keyString)!
+        guard let data = targetString.data(using: .utf8),
+              let keyData = Data(base64Encoded: keyString)
+        else { return "N/A"}
+        
         let key = SymmetricKey(data: keyData)
         var sealedBox: AES.GCM.SealedBox? = try? AES.GCM.seal(data, using: key)
         let encryptedData = sealedBox?.combined
