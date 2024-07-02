@@ -57,7 +57,7 @@ class KeyAES256 {
         else { return "N/A"}
         
         let key = SymmetricKey(data: keyData)
-        var sealedBox: AES.GCM.SealedBox? = try? AES.GCM.seal(data, using: key)
+        let sealedBox: AES.GCM.SealedBox? = try? AES.GCM.seal(data, using: key)
         let encryptedData = sealedBox?.combined
         return encryptedData?.base64EncodedString() ?? "N/A"
     }
