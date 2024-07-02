@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol NaverSearchBookListDelegate {
+protocol BookListDelegate {
     @MainActor func reloadTable()
     @MainActor func reloadTableCell(index: Int)
 }

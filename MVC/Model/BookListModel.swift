@@ -8,12 +8,12 @@
 import UIKit
 
 // MARK: - Model Class
-class NaverSearchBookListModel {
+class BookListModel {
     
     // MARK: - Properties
     
     var naverSearchBookAPI = NaverSearchBookAPI()
-    var naverSearchBookListDelegate: NaverSearchBookListDelegate?
+    var naverSearchBookListDelegate: BookListDelegate?
     var bookList: [Book] = []
     
     // MARK: - Methods
@@ -54,7 +54,7 @@ class NaverSearchBookListModel {
 }
 
 // MARK: - SampleData
-extension NaverSearchBookListModel {
+extension BookListModel {
     static func sampleBookList() -> [Book] {
         guard let fileUrl = Bundle.main
             .url(forResource: "SampleJSON", withExtension: "json") else {

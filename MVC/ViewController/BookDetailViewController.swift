@@ -8,17 +8,17 @@
 import UIKit
 
 // MARK: - Declaration
-class NaverSearchBookDetailViewController: UIViewController {
+class BookDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    let detailModel: NaverSearchBookDetailModel
-    let detailView = NaverSearchBookDetailView()
-    var nextViewController: NaverSearchBookWebViewController?
+    let detailModel: BookDetailModel
+    let detailView = BookDetailView()
+    var nextViewController: BookWebViewController?
     
     // MARK: - Init
     
-    init(_ detailModel: NaverSearchBookDetailModel) {
+    init(_ detailModel: BookDetailModel) {
         self.detailModel = detailModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,7 +33,7 @@ class NaverSearchBookDetailViewController: UIViewController {
 }
 
 // MARK: - Setting
-extension NaverSearchBookDetailViewController {
+extension BookDetailViewController {
     
     // MARK: - LifeCycle
     
@@ -66,7 +66,7 @@ extension NaverSearchBookDetailViewController {
     }
     
     private func loadNextPageWebView() {
-        nextViewController = NaverSearchBookWebViewController()
+        nextViewController = BookWebViewController()
         let link = detailModel.book?.link ?? "example.com"
         nextViewController?.loadURL(link: link)
     }
@@ -80,8 +80,8 @@ extension NaverSearchBookDetailViewController {
 }
 
 #Preview {
-    let detailModel = NaverSearchBookDetailModel()
-    detailModel.book = NaverSearchBookListModel.sampleBookList()[0]
-    return UINavigationController(rootViewController: NaverSearchBookDetailViewController(detailModel))
+    let detailModel = BookDetailModel()
+    detailModel.book = BookListModel.sampleBookList()[0]
+    return UINavigationController(rootViewController: BookDetailViewController(detailModel))
 }
 

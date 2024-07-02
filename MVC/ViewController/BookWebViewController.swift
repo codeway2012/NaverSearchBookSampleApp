@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 // MARK: - Declaration
-class NaverSearchBookWebViewController: UIViewController, WKUIDelegate {
+class BookWebViewController: UIViewController, WKNavigationDelegate {
     
     // MARK: - UI Component
     
@@ -22,13 +22,13 @@ class NaverSearchBookWebViewController: UIViewController, WKUIDelegate {
 }
 
 // MARK: - UI Setting
-extension NaverSearchBookWebViewController {
+extension BookWebViewController {
     
     // MARK: - LifeCycle
     
     override func loadView() {
         webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
-        webView.uiDelegate = self
+        webView.navigationDelegate = self
         self.view = webView
     }
     
@@ -37,9 +37,10 @@ extension NaverSearchBookWebViewController {
         self.title = "Book WebView"
         view.backgroundColor = .systemBackground
         modifyLeftBarButtonItem()
+        
     }
     
-    // MARK: -
+    // MARK: - load
     
     func loadURL(link: String) {
         _ = view
@@ -48,12 +49,28 @@ extension NaverSearchBookWebViewController {
             webView.load(request)
         }
     }
+}
+
+// MARK: - Delegate
+extension BookWebViewController {
+
+    // MARK: - WKNavigationDelegate
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let js = """
+        var element = document.getElementById('gnb-gnb');
+        if (element && element.parentNode) {
+            element.parentNode.remove();
+        }
+        """
+        webView.evaluateJavaScript(js, completionHandler: nil)
+    }
     
 }
 
 #Preview {
-    let vc = NaverSearchBookWebViewController()
-    let book = NaverSearchBookListModel.sampleBookList()[0]
+    let vc = BookWebViewController()
+    let book = BookListModel.sampleBookList()[0]
     vc.loadURL(link: book.link)
     return UINavigationController(rootViewController: vc)
 }

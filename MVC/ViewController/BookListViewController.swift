@@ -8,19 +8,19 @@
 import UIKit
 
 // MARK: - Declaration
-class NaverSearchBookListViewController:
+class BookListViewController:
     UIViewController, UITableViewDataSource, UITableViewDelegate,
-    UISearchBarDelegate, NaverSearchBookListDelegate {
+    UISearchBarDelegate, BookListDelegate {
     
     // MARK: - Properties
     
-    let listView = NaverSearchBookListView()
-    let listModel = NaverSearchBookListModel()
+    let listView = BookListView()
+    let listModel = BookListModel()
     var searchQuery = "프로그래밍"
 }
 
 // MARK: - Setting
-extension NaverSearchBookListViewController {
+extension BookListViewController {
     
     // MARK: - LifeCycle
     
@@ -60,19 +60,19 @@ extension NaverSearchBookListViewController {
     }
     
     private func navigationPushDetailVC(index: Int) {
-        let detailModel = NaverSearchBookDetailModel()
+        let detailModel = BookDetailModel()
         detailModel.book = listModel.bookList[index]
         guard let book = detailModel.book else { return }
         print("Selected book title: \(book.mainTitle)")
         
-        let vc = NaverSearchBookDetailViewController(detailModel)
+        let vc = BookDetailViewController(detailModel)
         navigationController?
             .pushViewController(vc, animated: false)
     }
 }
 
 // MARK: - Delegate
-extension NaverSearchBookListViewController {
+extension BookListViewController {
     
     // MARK: - UITableViewDataSource
     
@@ -126,5 +126,5 @@ extension NaverSearchBookListViewController {
 }
 
 #Preview {
-    return UINavigationController(rootViewController: NaverSearchBookListViewController())
+    return UINavigationController(rootViewController: BookListViewController())
 }

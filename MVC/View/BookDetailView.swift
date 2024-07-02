@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NaverSearchBookDetailView: UIView {
+class BookDetailView: UIView {
 
     // MARK: - UIComponent
     

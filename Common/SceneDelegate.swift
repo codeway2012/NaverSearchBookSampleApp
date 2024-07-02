@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let rootViewController = NaverSearchBookListViewController()
+        let rootViewController = BookListViewController()
         window.rootViewController = UINavigationController(rootViewController: rootViewController)
         self.window = window
         window.makeKeyAndVisible()
