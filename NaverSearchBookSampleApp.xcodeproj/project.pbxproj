@@ -175,8 +175,8 @@
 			isa = PBXGroup;
 			children = (
 				CE5DAB4C2C34051900E1D3CF /* BookDelegate.swift */,
-				CE5DAB4D2C34051900E1D3CF /* BookDetailViewController.swift */,
 				CE5DAB4A2C34051900E1D3CF /* BookListViewController.swift */,
+				CE5DAB4D2C34051900E1D3CF /* BookDetailViewController.swift */,
 				CE5DAB4B2C34051900E1D3CF /* BookWebViewController.swift */,
 			);
 			path = ViewController;
@@ -219,8 +219,8 @@
 		CE5DABA82C34108C00E1D3CF /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CE5DABAB2C3410B700E1D3CF /* BookDetailView.swift */,
 				CE5DABAA2C3410B700E1D3CF /* BookListView.swift */,
+				CE5DABAB2C3410B700E1D3CF /* BookDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

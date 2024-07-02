@@ -28,7 +28,7 @@ class BookDetailViewController: UIViewController {
     }
     
     deinit {
-        print("deinit - NaverSearchBookDetailViewController")
+        print("deinit - BookDetailViewController")
     }
 }
 
@@ -38,32 +38,27 @@ extension BookDetailViewController {
     // MARK: - LifeCycle
     
     override func loadView() {
+        loadNextPageWebView()
         self.view = detailView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
+        print("BookDetail - viewDidLoad")
         self.title = "Book Detail"
         view.backgroundColor = .systemBackground
-        modifyLeftBarButtonItem()
+        setupLeftBarButtonItem()
+        setupRightBarButtonItem()
         
         detailView.setupConfig(book: detailModel.book)
-        detailViewSetupAction()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
-        loadNextPageWebView()
+        print("BookDetail - viewDidAppear")
+        
     }
     
     //MARK: - setup
-    
-    private func detailViewSetupAction() {
-        detailView.linkButton.addTarget(
-            self, action: #selector(pushWebViewController),
-            for: .touchUpInside)
-    }
     
     private func loadNextPageWebView() {
         nextViewController = BookWebViewController()
@@ -71,11 +66,18 @@ extension BookDetailViewController {
         nextViewController?.loadURL(link: link)
     }
     
+    func setupRightBarButtonItem() {
+        let rightBarButtonItem = UIBarButtonItem(
+            title: "Web", style: .plain, target: self,
+            action: #selector(rightBarButtonTapped))
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+    }
+    
     // MARK: - objc func
     
-    @objc func pushWebViewController() {
+    @objc func rightBarButtonTapped() {
         let vc = nextViewController!
-        self.navigationController?.pushViewController(vc, animated: false)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 

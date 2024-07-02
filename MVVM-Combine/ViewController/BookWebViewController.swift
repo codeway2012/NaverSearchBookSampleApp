@@ -35,7 +35,7 @@ extension BookWebViewController {
         super.viewDidLoad()
         self.title = "Book WebView"
         view.backgroundColor = .systemBackground
-        modifyLeftBarButtonItem()
+        setupLeftBarButtonItem()
         webView.navigationDelegate = self
     }
     
@@ -48,19 +48,17 @@ extension BookWebViewController {
             webView.load(request)
         }
     }
+}
+
+// MARK: - Delegate
+extension BookWebViewController {
     
     // MARK: - WKNavigationDelegate
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let js = """
-        var element = document.getElementById('gnb-gnb');
-        if (element && element.parentNode) {
-            element.parentNode.remove();
-        }
-        """
+        let js = "document.getElementById('gnb-gnb').remove()"
         webView.evaluateJavaScript(js, completionHandler: nil)
     }
-    
 }
 
 #Preview {

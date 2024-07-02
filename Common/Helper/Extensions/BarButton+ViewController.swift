@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIViewController {
-    func modifyLeftBarButtonItem() {
+    func setupLeftBarButtonItem() {
         let leftBarButtonItem = UIBarButtonItem(
             title: "Back", style: .plain, target: self,
             action: #selector(leftBarButtonTapped))
@@ -16,6 +16,6 @@ extension UIViewController {
     }
     
     @objc func leftBarButtonTapped() {
-        self.navigationController?.popViewController(animated: false)
+        self.navigationController?.popViewController(animated: true)
     }
 }
