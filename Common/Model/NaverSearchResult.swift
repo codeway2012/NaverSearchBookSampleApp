@@ -10,8 +10,8 @@ import Foundation
 // MARK: - Decodable
 
 struct NaverSearchBookResult: Decodable {
-    private let lastBuildDate: String
-    private let total, start, display: Int
+    let lastBuildDate: String
+    let total, start, display: Int
     let items: [Item]
     
     struct Item: Decodable {

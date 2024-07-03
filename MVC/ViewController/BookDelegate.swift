@@ -9,5 +9,6 @@ import UIKit
 
 protocol BookListDelegate {
     @MainActor func reloadTable()
-    @MainActor func reloadTableCell(index: Int)
+    @MainActor func reloadTableRows(indexPaths: [IndexPath])
+    @MainActor func insertTableRows(indexPaths: [IndexPath])
 }

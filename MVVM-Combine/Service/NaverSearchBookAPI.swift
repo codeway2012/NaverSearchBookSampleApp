@@ -93,11 +93,15 @@ class NaverSearchBookAPI {
                 .eraseToAnyPublisher()
         }
         
-        components.queryItems = [
-            URLQueryItem(name: "query", value: query),
-            URLQueryItem(name: "start", value: String((page - 1) * itemsPerPage + 1)),
-            URLQueryItem(name: "display", value: String(itemsPerPage))
-        ]
+        components.queryItems = {
+            let start = String((page - 1) * itemsPerPage + 1)
+            let display = String(itemsPerPage)
+            return [
+                URLQueryItem(name: "query", value: query),
+                URLQueryItem(name: "start", value: start),
+                URLQueryItem(name: "display", value: display)
+            ]
+        }()
         
         guard let url = components.url else {
             return Fail(error: APIRequestError.invalidURL)

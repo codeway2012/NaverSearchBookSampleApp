@@ -9,14 +9,13 @@ import UIKit
 
 // MARK: - Declaration
 class BookListViewController:
-    UIViewController, UITableViewDataSource, UITableViewDelegate,
+    UIViewController, UITableViewDataSource, UITableViewDelegate, UITableViewDataSourcePrefetching,
     UISearchBarDelegate, BookListDelegate {
     
     // MARK: - Properties
     
     let listView = BookListView()
     let listModel = BookListModel()
-    var searchQuery = "프로그래밍"
 }
 
 // MARK: - Setting
@@ -33,15 +32,16 @@ extension BookListViewController {
         view.backgroundColor = .systemBackground
         self.title = "Book List"
         
-        listView.setupConfig(searchBarText: searchQuery)
+        listView.setupConfig(searchBarText: listModel.params.query)
         
         listView.searchBar.delegate = self
         listView.tableView.delegate = self
         listView.tableView.dataSource = self
+        listView.tableView.prefetchDataSource = self
         listView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         listModel.naverSearchBookListDelegate = self
-        listModel.searchBookList(query: searchQuery)
+        listModel.searchBookList()
     }
     
     // MARK: - method
@@ -87,6 +87,19 @@ extension BookListViewController {
         return cellConfig(cell: cell, book: book)
     }
     
+    // MARK: - UITableViewDataSourcePrefetching
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard !listModel.isFetching,
+              !listModel.isAllDataLoad else {
+            print("prefetchRowsAt - guard")
+            return
+        }
+        if indexPaths.contains(where: { $0.row >= listModel.triggerIndex }) {
+            listModel.searchBookListPrefetching()
+        }
+    }
+    
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -96,18 +109,17 @@ extension BookListViewController {
     // MARK: - UISearchBarDelegate
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchQuery = searchText
-        print("textDidChange - \(self.searchQuery)")
+        listModel.params.query = searchText
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        listModel.searchBookList(query: searchQuery)
+        listModel.searchBookList()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchQuery = ""
-        searchBar.text = searchQuery
+        listModel.params.query = ""
+        searchBar.text = listModel.params.query
         searchBar.resignFirstResponder()
     }
     
@@ -115,12 +127,17 @@ extension BookListViewController {
     
     func reloadTable() {
         listView.tableView.reloadData()
-        print("reloadTable")
+        print("reloadData")
+    }
+
+    func reloadTableRows(indexPaths: [IndexPath]) {
+        listView.tableView.reloadRows(at: indexPaths, with: .none)
+        print("reloadTableCell - \(indexPaths)")
     }
     
-    func reloadTableCell(index: Int) {
-        listView.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        print("reloadTableCell - \(index)")
+    func insertTableRows(indexPaths: [IndexPath]) {
+        listView.tableView.insertRows(at: indexPaths, with: .none)
+        print("tableInsertRows - \(indexPaths)")
     }
     
 }

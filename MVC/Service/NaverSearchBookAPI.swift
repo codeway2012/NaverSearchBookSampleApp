@@ -28,17 +28,23 @@ class NaverSearchBookAPI {
         }
     }
     
-    func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 100)
+    // async 방식
+    func searchBook(params: (query: String, nextStart: Int, display: Int))
     async -> Result<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return .failure(.invalidURL)
         }
-        
-        components.queryItems = [
-            URLQueryItem(name: "query", value: query),
-            URLQueryItem(name: "start", value: String((page - 1) * itemsPerPage + 1)),
-            URLQueryItem(name: "display", value: String(itemsPerPage))
-        ]
+
+        components.queryItems = {
+            let query = params.query
+            let start = String(params.nextStart)
+            let display = String(params.display)
+            return [
+                URLQueryItem(name: "query", value: query),
+                URLQueryItem(name: "start", value: start),
+                URLQueryItem(name: "display", value: display)
+            ]
+        }()
         
         guard let url = components.url else {
             return .failure(.invalidURL)
