@@ -54,7 +54,7 @@ extension BookDetailViewController {
         detailView.setupConfig(book: detailModel.book)
     }
     
-    //MARK: - setup
+    //MARK: - Setup
     
     private func loadNextPageWebView() {
         nextViewController = BookWebViewController()
@@ -70,7 +70,7 @@ extension BookDetailViewController {
         navigationItem.rightBarButtonItem = rightBarButtonItem
     }
     
-    // MARK: - objc func
+    // MARK: - Action
     
     @objc func rightBarButtonTapped() {
         let vc = nextViewController!
@@ -78,7 +78,7 @@ extension BookDetailViewController {
     }
 }
 
-// MARK: - delegate
+// MARK: - Delegate
 extension BookDetailViewController {
     
     // MARK: - BookDetailDelegate

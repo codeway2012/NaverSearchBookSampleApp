@@ -28,6 +28,7 @@ class BookListModel {
     }
     
     // MARK: - Methods
+    
     func naverSearchBookListCount() -> Int {
         print("Model naverSearchBookListCount - \(bookList.count)")
         return bookList.count

@@ -9,14 +9,13 @@ import UIKit
 
 // MARK: - Declaration
 class BookListViewController:
-    UIViewController, UITableViewDataSource, UITableViewDelegate,
+    UIViewController, UITableViewDataSource, UITableViewDelegate, UITableViewDataSourcePrefetching,
     UISearchBarDelegate, BookListDelegate {
     
     // MARK: - Properties
     
     let listView = BookListView()
     let listViewModel = BookListViewModel()
-    var searchQuery = "프로그래밍"
 }
 
 // MARK: - Setting
@@ -25,26 +24,27 @@ extension BookListViewController {
     // MARK: - LifeCycle
     
     override func loadView() {
-        self.view = listView
+        view = listView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        self.title = "Book List"
+        title = "Book List"
         
-        listView.setupConfig(searchBarText: searchQuery)
+        listView.setupConfig(searchBarText: listViewModel.params.query)
         
         listView.searchBar.delegate = self
         listView.tableView.delegate = self
         listView.tableView.dataSource = self
+        listView.tableView.prefetchDataSource = self
         listView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         listViewModel.naverSearchBookListDelegate = self
-        listViewModel.searchBookList(query: searchQuery)
+        listViewModel.searchBookList()
     }
     
-    // MARK: - method
+    // MARK: - Methods
     
     private func cellConfig(cell: UITableViewCell, book: Book) -> UITableViewCell {
         var config = cell.defaultContentConfiguration()
@@ -87,6 +87,20 @@ extension BookListViewController {
         return cellConfig(cell: cell, book: book)
     }
     
+    // MARK: - UITableViewDataSourcePrefetching
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard !listViewModel.isFetching,
+              !listViewModel.isAllDataLoad else {
+            print("prefetchRowsAt - guard")
+            return
+        }
+        if indexPaths.contains(where: { $0.row >= listViewModel.triggerIndex }) {
+            listViewModel.searchBookListPrefetching()
+        }
+    }
+    
+    
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -96,31 +110,35 @@ extension BookListViewController {
     // MARK: - UISearchBarDelegate
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchQuery = searchText
-        print("textDidChange - \(self.searchQuery)")
+        listViewModel.params.query = searchText
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        listViewModel.searchBookList(query: searchQuery)
+        listViewModel.searchBookList()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchQuery = ""
-        searchBar.text = searchQuery
+        listViewModel.params.query = ""
+        searchBar.text = listViewModel.params.query
         searchBar.resignFirstResponder()
     }
     
-    // MARK: - NaverSearchBookListDelegate
+    // MARK: - BookListDelegate
     
     func reloadTable() {
         listView.tableView.reloadData()
-        print("reloadTable")
+        print("reloadData")
     }
     
-    func reloadTableCell(index: Int) {
-        listView.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-        print("reloadTableCell - \(index)")
+    func reloadTableRows(indexPaths: [IndexPath]) {
+        listView.tableView.reloadRows(at: indexPaths, with: .none)
+        print("reloadTableCell - \(indexPaths)")
+    }
+    
+    func insertTableRows(indexPaths: [IndexPath]) {
+        listView.tableView.insertRows(at: indexPaths, with: .none)
+        print("tableInsertRows - \(indexPaths)")
     }
     
 }

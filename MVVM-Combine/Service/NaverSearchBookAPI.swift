@@ -28,7 +28,71 @@ class NaverSearchBookAPI {
         }
     }
     
-    func searchBook(query: String, page: Int = 1, itemsPerPage: Int = 100)
+    // TODO: combine 방식
+    func searchBookCombine(params: (query: String, nextStart: Int, display: Int)) -> AnyPublisher<NaverSearchBookResult, APIRequestError> {
+        guard var components = URLComponents(string: baseURL) else {
+            return Fail(error: APIRequestError.invalidURL)
+                .eraseToAnyPublisher()
+        }
+        
+        components.queryItems = {
+            let query = params.query
+            let start = String(params.nextStart)
+            let display = String(params.display)
+            return [
+                URLQueryItem(name: "query", value: query),
+                URLQueryItem(name: "start", value: start),
+                URLQueryItem(name: "display", value: display)
+            ]
+        }()
+        
+        guard let url = components.url else {
+            return Fail(error: APIRequestError.invalidURL)
+                .eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(clientId, forHTTPHeaderField: "X-Naver-Client-Id")
+        request.addValue(clientSecret, forHTTPHeaderField: "X-Naver-Client-Secret")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap { data, response in
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
+                    throw APIRequestError.invalidResponse
+                }
+                return (data, statusCode)
+            }
+            .tryMap { (data, statusCode) -> NaverSearchBookResult in
+                if (200...299).contains(statusCode) {
+                    do {
+                        let result = try NaverSearchBookResult(data: data)
+                        return result
+                    } catch {
+                        throw APIRequestError.successDataDecodingFailed(error)
+                    }
+                } else {
+                    do {
+                        let result = try NaverSearchErrorResult(data: data)
+                        throw APIRequestError.naverAPIError(statusCode: statusCode, result: result)
+                    } catch {
+                        throw APIRequestError.errorDataDecodingFailed(error)
+                    }
+                }
+            }
+            .mapError { error -> APIRequestError in
+                if let apiError = error as? APIRequestError {
+                    return apiError
+                } else {
+                    return APIRequestError.unknown(error)
+                }
+            }
+            .eraseToAnyPublisher()
+        
+    }
+    
+    // TODO: combine 완성 후 삭제 예정
+    func searchBook(params: (query: String, nextStart: Int, display: Int))
     async -> Result<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return .failure(.invalidURL)
@@ -87,64 +151,5 @@ class NaverSearchBookAPI {
         }
     }
     
-    func searchBookCombine(query: String, page: Int = 1, itemsPerPage: Int = 100) -> AnyPublisher<NaverSearchBookResult, APIRequestError> {
-        guard var components = URLComponents(string: baseURL) else {
-            return Fail(error: APIRequestError.invalidURL)
-                .eraseToAnyPublisher()
-        }
-        
-        components.queryItems = {
-            let start = String((page - 1) * itemsPerPage + 1)
-            let display = String(itemsPerPage)
-            return [
-                URLQueryItem(name: "query", value: query),
-                URLQueryItem(name: "start", value: start),
-                URLQueryItem(name: "display", value: display)
-            ]
-        }()
-        
-        guard let url = components.url else {
-            return Fail(error: APIRequestError.invalidURL)
-                .eraseToAnyPublisher()
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue(clientId, forHTTPHeaderField: "X-Naver-Client-Id")
-        request.addValue(clientSecret, forHTTPHeaderField: "X-Naver-Client-Secret")
-        
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .tryMap { data, response in
-                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-                    throw APIRequestError.invalidResponse
-                }
-                return (data, statusCode)
-            }
-            .tryMap { (data, statusCode) -> NaverSearchBookResult in
-                if (200...299).contains(statusCode) {
-                    do {
-                        let result = try NaverSearchBookResult(data: data)
-                        return result
-                    } catch {
-                        throw APIRequestError.successDataDecodingFailed(error)
-                    }
-                } else {
-                    do {
-                        let result = try NaverSearchErrorResult(data: data)
-                        throw APIRequestError.naverAPIError(statusCode: statusCode, result: result)
-                    } catch {
-                        throw APIRequestError.errorDataDecodingFailed(error)
-                    }
-                }
-            }
-            .mapError { error -> APIRequestError in
-                if let apiError = error as? APIRequestError {
-                    return apiError
-                } else {
-                    return APIRequestError.unknown(error)
-                }
-            }
-            .eraseToAnyPublisher()
-        
-    }
+    
 }

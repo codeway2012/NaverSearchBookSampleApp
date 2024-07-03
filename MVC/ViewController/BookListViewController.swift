@@ -24,13 +24,13 @@ extension BookListViewController {
     // MARK: - LifeCycle
     
     override func loadView() {
-        self.view = listView
+        view = listView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        self.title = "Book List"
+        title = "Book List"
         
         listView.setupConfig(searchBarText: listModel.params.query)
         
@@ -44,7 +44,7 @@ extension BookListViewController {
         listModel.searchBookList()
     }
     
-    // MARK: - method
+    // MARK: - Method
     
     private func cellConfig(cell: UITableViewCell, book: Book) -> UITableViewCell {
         var config = cell.defaultContentConfiguration()
@@ -123,7 +123,7 @@ extension BookListViewController {
         searchBar.resignFirstResponder()
     }
     
-    // MARK: - NaverSearchBookListDelegate
+    // MARK: - BookListDelegate
     
     func reloadTable() {
         listView.tableView.reloadData()

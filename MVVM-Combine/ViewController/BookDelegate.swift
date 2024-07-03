@@ -7,7 +7,13 @@
 
 import UIKit
 
-protocol BookListDelegate {
+protocol BookListDelegate: AnyObject {
     @MainActor func reloadTable()
-    @MainActor func reloadTableCell(index: Int)
+    @MainActor func reloadTableRows(indexPaths: [IndexPath])
+    @MainActor func insertTableRows(indexPaths: [IndexPath])
 }
+
+protocol BookDetailDelegate: AnyObject {
+    func enabledRightBarButtonItem()
+}
+

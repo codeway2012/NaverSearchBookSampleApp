@@ -13,43 +13,77 @@ class BookListViewModel {
     // MARK: - Properties
     
     var naverSearchBookAPI = NaverSearchBookAPI()
-    var naverSearchBookListDelegate: BookListDelegate?
+    weak var naverSearchBookListDelegate: BookListDelegate?
     var bookList: [Book] = []
+    var params: (query: String, nextStart: Int, display: Int) = ("iOS 프로그래밍", 0, 0)
+    var isFetching: Bool = false
+    var isAllDataLoad: Bool = false
+    var triggerIndex: Int { return bookList.count - 12 }
+    var currentIndexPaths: [IndexPath] {
+        let index : (start: Int, end: Int)
+        index.start = params.nextStart - params.display - 1
+        index.end = params.nextStart - 1
+        return (index.start..<index.end)
+            .map { IndexPath(row: $0, section: 0) }
+    }
     
     // MARK: - Methods
+    
     func naverSearchBookListCount() -> Int {
         print("Model naverSearchBookListCount - \(bookList.count)")
         return bookList.count
     }
     
-    func searchBookList(query: String) {
+    func searchBookList() {
         print("Model searchBookList")
+        bookList.removeAll()
+        params = (query: params.query, nextStart: 1, display: 15)
         Task {
-            await refreshTableWithRequestedBookList(query: query)
+            await naverSearchBookListDelegate?.reloadTable()
+            isFetching = true
+            await refreshTableWithRequestedBookList()
             await refreshCellsWithDownloadedImages()
+            isFetching = false
         }
     }
     
-    private func refreshTableWithRequestedBookList(query: String) async {
+    func searchBookListPrefetching() {
+        print("searchBookListPrefetching")
+        Task {
+            isFetching = true
+            await refreshTableWithRequestedBookList()
+            await refreshCellsWithDownloadedImages()
+            isFetching = false
+        }
+    }
+    
+    private func refreshTableWithRequestedBookList() async {
         let resultBookList: NaverSearchBookResult
-        switch await naverSearchBookAPI.searchBook(query: query) {
+        switch await naverSearchBookAPI.searchBook(params: params) {
             case .success(let data):
                 resultBookList = data
             case .failure(let error):
                 print("NaverSearchBookListModel requestData Error: \(error.localizedDescription)")
                 return
         }
-        self.bookList = resultBookList.items.map { Book($0) }
-        await naverSearchBookListDelegate?.reloadTable()
+        
+        params.nextStart = resultBookList.start + resultBookList.display
+        params.display = resultBookList.display
+        isAllDataLoad = resultBookList.display == 0 || params.nextStart > 1000
+        bookList.append(contentsOf: resultBookList.items.map { Book($0) })
+        await naverSearchBookListDelegate?.insertTableRows(indexPaths: currentIndexPaths)
     }
     
     private func refreshCellsWithDownloadedImages() async {
-        for (index, value) in bookList.enumerated() {
+        let currentStart = params.nextStart - params.display - 1
+        let lastBookList = bookList.suffix(params.display)
+        for (index, value) in lastBookList.enumerated() {
+            let currentIndex = index + currentStart
             if let downloadedImage = await naverSearchBookAPI.downloadImage(value.imageLink) {
-                bookList[index].image = downloadedImage
-                await naverSearchBookListDelegate?.reloadTableCell(index: index)
+                bookList[currentIndex].image = downloadedImage
             }
         }
+        await naverSearchBookListDelegate?.reloadTableRows(indexPaths: currentIndexPaths)
     }
 }
 

@@ -14,6 +14,7 @@ class BookWebViewController: UIViewController, WKNavigationDelegate {
     // MARK: - UI Component
     
     var webView: WKWebView!
+    weak var detailDelegate: BookDetailDelegate?
     
     deinit {
         print("deinit - NaverSearchBookWebViewController")
@@ -28,6 +29,7 @@ extension BookWebViewController {
     
     override func loadView() {
         webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        webView.navigationDelegate = self
         self.view = webView
     }
     
@@ -36,10 +38,9 @@ extension BookWebViewController {
         self.title = "Book WebView"
         view.backgroundColor = .systemBackground
         setupLeftBarButtonItem()
-        webView.navigationDelegate = self
     }
     
-    // MARK: - load
+    // MARK: - Methods
     
     func loadURL(link: String) {
         _ = view
@@ -57,7 +58,10 @@ extension BookWebViewController {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let js = "document.getElementById('gnb-gnb').remove()"
-        webView.evaluateJavaScript(js, completionHandler: nil)
+        webView.evaluateJavaScript(js) { _, error in
+            guard error == nil else { return }
+            self.detailDelegate?.enabledRightBarButtonItem()
+        }
     }
 }
 

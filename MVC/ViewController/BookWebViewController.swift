@@ -40,7 +40,7 @@ extension BookWebViewController {
         setupLeftBarButtonItem()
     }
     
-    // MARK: - load
+    // MARK: - Methods
     
     func loadURL(link: String) {
         _ = view
