@@ -42,8 +42,8 @@
 		CE5DAB512C34051A00E1D3CF /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DAB4D2C34051900E1D3CF /* BookDetailViewController.swift */; };
 		CE5DAB592C3406B000E1D3CF /* NaverSearchBookAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DAB582C3406B000E1D3CF /* NaverSearchBookAPI.swift */; };
 		CE5DAB5B2C3406B900E1D3CF /* NaverSearchBookAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DAB5A2C3406B900E1D3CF /* NaverSearchBookAPI.swift */; };
-		CE5DABA22C34104200E1D3CF /* BookListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABA02C34104200E1D3CF /* BookListModel.swift */; };
-		CE5DABA32C34104200E1D3CF /* BookDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABA12C34104200E1D3CF /* BookDetailModel.swift */; };
+		CE5DABA22C34104200E1D3CF /* BookListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABA02C34104200E1D3CF /* BookListViewModel.swift */; };
+		CE5DABA32C34104200E1D3CF /* BookDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABA12C34104200E1D3CF /* BookDetailViewModel.swift */; };
 		CE5DABA62C34104900E1D3CF /* BookListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABA42C34104900E1D3CF /* BookListModel.swift */; };
 		CE5DABA72C34104900E1D3CF /* BookDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABA52C34104900E1D3CF /* BookDetailModel.swift */; };
 		CE5DABAC2C3410B700E1D3CF /* BookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5DABAA2C3410B700E1D3CF /* BookListView.swift */; };
@@ -74,8 +74,8 @@
 		CE5DAB4D2C34051900E1D3CF /* BookDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
 		CE5DAB582C3406B000E1D3CF /* NaverSearchBookAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaverSearchBookAPI.swift; sourceTree = "<group>"; };
 		CE5DAB5A2C3406B900E1D3CF /* NaverSearchBookAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaverSearchBookAPI.swift; sourceTree = "<group>"; };
-		CE5DABA02C34104200E1D3CF /* BookListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookListModel.swift; sourceTree = "<group>"; };
-		CE5DABA12C34104200E1D3CF /* BookDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookDetailModel.swift; sourceTree = "<group>"; };
+		CE5DABA02C34104200E1D3CF /* BookListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookListViewModel.swift; sourceTree = "<group>"; };
+		CE5DABA12C34104200E1D3CF /* BookDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookDetailViewModel.swift; sourceTree = "<group>"; };
 		CE5DABA42C34104900E1D3CF /* BookListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookListModel.swift; sourceTree = "<group>"; };
 		CE5DABA52C34104900E1D3CF /* BookDetailModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookDetailModel.swift; sourceTree = "<group>"; };
 		CE5DABAA2C3410B700E1D3CF /* BookListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookListView.swift; sourceTree = "<group>"; };
@@ -210,8 +210,8 @@
 		CE5DAB9F2C34100500E1D3CF /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				CE5DABA02C34104200E1D3CF /* BookListModel.swift */,
-				CE5DABA12C34104200E1D3CF /* BookDetailModel.swift */,
+				CE5DABA02C34104200E1D3CF /* BookListViewModel.swift */,
+				CE5DABA12C34104200E1D3CF /* BookDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -439,7 +439,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE5DABA22C34104200E1D3CF /* BookListModel.swift in Sources */,
+				CE5DABA22C34104200E1D3CF /* BookListViewModel.swift in Sources */,
 				CE5DAB232C34046100E1D3CF /* KeyAES256.swift in Sources */,
 				CE5DAB242C34046100E1D3CF /* BookDelegate.swift in Sources */,
 				CE5DAB272C34046100E1D3CF /* Book.swift in Sources */,
@@ -449,7 +449,7 @@
 				CE5DAB282C34046100E1D3CF /* ShadowImageView.swift in Sources */,
 				CE5DAB292C34046100E1D3CF /* AppDelegate.swift in Sources */,
 				CE5DAB2B2C34046100E1D3CF /* NaverSearchResult.swift in Sources */,
-				CE5DABA32C34104200E1D3CF /* BookDetailModel.swift in Sources */,
+				CE5DABA32C34104200E1D3CF /* BookDetailViewModel.swift in Sources */,
 				CE5DAB2C2C34046100E1D3CF /* BarButton+ViewController.swift in Sources */,
 				CE5DAB2D2C34046100E1D3CF /* SceneDelegate.swift in Sources */,
 				CE5DAB2F2C34046100E1D3CF /* TextStackView.swift in Sources */,

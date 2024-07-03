@@ -6,6 +6,6 @@
 //
 
 
-class BookDetailModel {
+class BookDetailViewModel {
     var book: Book?
 }

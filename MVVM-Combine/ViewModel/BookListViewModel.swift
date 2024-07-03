@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Model Class
-class BookListModel {
+class BookListViewModel {
     
     // MARK: - Properties
     
@@ -54,7 +54,7 @@ class BookListModel {
 }
 
 // MARK: - SampleData
-extension BookListModel {
+extension BookListViewModel {
     static func sampleBookList() -> [Book] {
         guard let fileUrl = Bundle.main
             .url(forResource: "SampleJSON", withExtension: "json") else {

@@ -15,7 +15,7 @@ class BookListViewController:
     // MARK: - Properties
     
     let listView = BookListView()
-    let listModel = BookListModel()
+    let listViewModel = BookListViewModel()
     var searchQuery = "프로그래밍"
 }
 
@@ -40,8 +40,8 @@ extension BookListViewController {
         listView.tableView.dataSource = self
         listView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        listModel.naverSearchBookListDelegate = self
-        listModel.searchBookList(query: searchQuery)
+        listViewModel.naverSearchBookListDelegate = self
+        listViewModel.searchBookList(query: searchQuery)
     }
     
     // MARK: - method
@@ -60,12 +60,12 @@ extension BookListViewController {
     }
     
     private func navigationPushDetailVC(index: Int) {
-        let detailModel = BookDetailModel()
-        detailModel.book = listModel.bookList[index]
-        guard let book = detailModel.book else { return }
+        let detailViewModel = BookDetailViewModel()
+        detailViewModel.book = listViewModel.bookList[index]
+        guard let book = detailViewModel.book else { return }
         print("Selected book title: \(book.mainTitle)")
         
-        let vc = BookDetailViewController(detailModel)
+        let vc = BookDetailViewController(detailViewModel)
         navigationController?
             .pushViewController(vc, animated: false)
     }
@@ -77,13 +77,13 @@ extension BookListViewController {
     // MARK: - UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listModel.naverSearchBookListCount()
+        return listViewModel.naverSearchBookListCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "cell", for: indexPath)
-        let book = listModel.bookList[indexPath.row]
+        let book = listViewModel.bookList[indexPath.row]
         return cellConfig(cell: cell, book: book)
     }
     
@@ -102,7 +102,7 @@ extension BookListViewController {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        listModel.searchBookList(query: searchQuery)
+        listViewModel.searchBookList(query: searchQuery)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

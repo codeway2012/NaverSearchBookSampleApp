@@ -12,14 +12,14 @@ class BookDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    let detailModel: BookDetailModel
+    let detailViewModel: BookDetailViewModel
     let detailView = BookDetailView()
     var nextViewController: BookWebViewController?
     
     // MARK: - Init
     
-    init(_ detailModel: BookDetailModel) {
-        self.detailModel = detailModel
+    init(_ detailViewModel: BookDetailViewModel) {
+        self.detailViewModel = detailViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,7 +50,7 @@ extension BookDetailViewController {
         setupLeftBarButtonItem()
         setupRightBarButtonItem()
         
-        detailView.setupConfig(book: detailModel.book)
+        detailView.setupConfig(book: detailViewModel.book)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,7 +62,7 @@ extension BookDetailViewController {
     
     private func loadNextPageWebView() {
         nextViewController = BookWebViewController()
-        let link = detailModel.book?.link ?? "example.com"
+        let link = detailViewModel.book?.link ?? "example.com"
         nextViewController?.loadURL(link: link)
     }
     
@@ -82,8 +82,8 @@ extension BookDetailViewController {
 }
 
 #Preview {
-    let detailModel = BookDetailModel()
-    detailModel.book = BookListModel.sampleBookList()[0]
-    return UINavigationController(rootViewController: BookDetailViewController(detailModel))
+    let detailViewModel = BookDetailViewModel()
+    detailViewModel.book = BookListViewModel.sampleBookList()[0]
+    return UINavigationController(rootViewController: BookDetailViewController(detailViewModel))
 }
 

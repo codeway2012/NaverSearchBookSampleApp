@@ -63,7 +63,7 @@ extension BookWebViewController {
 
 #Preview {
     let vc = BookWebViewController()
-    let book = BookListModel.sampleBookList()[0]
+    let book = BookListViewModel.sampleBookList()[0]
     vc.loadURL(link: book.link)
     return UINavigationController(rootViewController: vc)
 }
