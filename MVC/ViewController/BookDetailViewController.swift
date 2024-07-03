@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Declaration
-class BookDetailViewController: UIViewController {
+class BookDetailViewController: UIViewController, BookDetailDelegate {
     
     // MARK: - Properties
     
@@ -38,8 +38,7 @@ extension BookDetailViewController {
     // MARK: - LifeCycle
     
     override func loadView() {
-        loadNextPageWebView()
-        self.view = detailView
+        view = detailView
     }
     
     override func viewDidLoad() {
@@ -47,21 +46,19 @@ extension BookDetailViewController {
         print("BookDetail - viewDidLoad")
         self.title = "Book Detail"
         view.backgroundColor = .systemBackground
+        loadNextPageWebView()
         setupLeftBarButtonItem()
         setupRightBarButtonItem()
+        navigationItem.rightBarButtonItem?.isEnabled = false
         
         detailView.setupConfig(book: detailModel.book)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        print("BookDetail - viewDidAppear")
-        
     }
     
     //MARK: - setup
     
     private func loadNextPageWebView() {
         nextViewController = BookWebViewController()
+        nextViewController?.detailDelegate = self
         let link = detailModel.book?.link ?? "example.com"
         nextViewController?.loadURL(link: link)
     }
@@ -70,14 +67,23 @@ extension BookDetailViewController {
         let rightBarButtonItem = UIBarButtonItem(
             title: "Web", style: .plain, target: self,
             action: #selector(rightBarButtonTapped))
-        self.navigationItem.rightBarButtonItem = rightBarButtonItem
+        navigationItem.rightBarButtonItem = rightBarButtonItem
     }
     
     // MARK: - objc func
     
     @objc func rightBarButtonTapped() {
         let vc = nextViewController!
-        self.navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: - delegate
+extension BookDetailViewController {
+    
+    // MARK: - BookDetailDelegate
+    func enabledRightBarButtonItem() {
+        navigationItem.rightBarButtonItem?.isEnabled = true
     }
 }
 

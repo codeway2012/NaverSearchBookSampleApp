@@ -24,7 +24,6 @@ class BookDetailView: UIView {
     let isbnView = TextStackView()
     let descriptionView = TextStackView()
     let linkView = TextStackView()
-    let linkButton = UIButton(type: .system)
     
     // MARK: - Init
     
@@ -84,8 +83,6 @@ class BookDetailView: UIView {
         isbnView.setTitle("ISBN")
         bookContentStackView.addArrangedSubview(descriptionView)
         descriptionView.setTitle("책 소개")
-        bookContentStackView.addArrangedSubview(linkButton)
-        linkButton.setTitle("네이버 도서에서 보기", for: .normal)
     }
 
     private func setupLayout() {

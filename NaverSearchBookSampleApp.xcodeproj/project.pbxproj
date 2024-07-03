@@ -272,8 +272,8 @@
 		CECF07552C3509A90004B32A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CECF07572C3509C30004B32A /* BookDetailView.swift */,
 				CECF07562C3509C30004B32A /* BookListView.swift */,
+				CECF07572C3509C30004B32A /* BookDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

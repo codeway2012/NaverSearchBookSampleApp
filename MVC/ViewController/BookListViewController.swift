@@ -67,7 +67,7 @@ extension BookListViewController {
         
         let vc = BookDetailViewController(detailModel)
         navigationController?
-            .pushViewController(vc, animated: false)
+            .pushViewController(vc, animated: true)
     }
 }
 

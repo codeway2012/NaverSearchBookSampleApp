@@ -14,9 +14,10 @@ class BookWebViewController: UIViewController, WKNavigationDelegate {
     // MARK: - UI Component
     
     var webView: WKWebView!
-    
+    weak var detailDelegate: BookDetailDelegate?
+
     deinit {
-        print("deinit - NaverSearchBookWebViewController")
+        print("deinit - BookWebViewController")
     }
     
 }
@@ -57,7 +58,10 @@ extension BookWebViewController {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let js = "document.getElementById('gnb-gnb').remove()"
-        webView.evaluateJavaScript(js, completionHandler: nil)
+        webView.evaluateJavaScript(js) { _, error in
+            guard error == nil else { return }
+            self.detailDelegate?.enabledRightBarButtonItem()
+        }
     }
 }
 

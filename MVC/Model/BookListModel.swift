@@ -13,12 +13,12 @@ class BookListModel {
     // MARK: - Properties
     
     var naverSearchBookAPI = NaverSearchBookAPI()
-    var naverSearchBookListDelegate: BookListDelegate?
+    weak var naverSearchBookListDelegate: BookListDelegate?
     var bookList: [Book] = []
     var params: (query: String, nextStart: Int, display: Int) = ("iOS", 0, 0)
     var isFetching: Bool = false
     var isAllDataLoad: Bool = false
-    var triggerIndex: Int { return bookList.count - 10 }
+    var triggerIndex: Int { return bookList.count - 12 }
     var currentIndexPaths: [IndexPath] {
         let index : (start: Int, end: Int)
         index.start = params.nextStart - params.display - 1
