@@ -14,11 +14,11 @@ class BookListModel {
     
     var naverSearchBookAPI = NaverSearchBookAPI()
     weak var naverSearchBookListDelegate: BookListDelegate?
-    var bookList: [Book] = []
-    var params: (query: String, nextStart: Int, display: Int) = ("iOS 프로그래밍", 0, 0)
     var isFetching: Bool = false
     var isAllDataLoad: Bool = false
+    var bookList: [Book] = []
     var triggerIndex: Int { return bookList.count - 12 }
+    var params: (query: String, nextStart: Int, display: Int) = ("iOS 프로그래밍", 0, 0)
     var currentIndexPaths: [IndexPath] {
         let index : (start: Int, end: Int)
         index.start = params.nextStart - params.display - 1
@@ -26,6 +26,7 @@ class BookListModel {
         return (index.start..<index.end)
             .map { IndexPath(row: $0, section: 0) }
     }
+
     
     // MARK: - Methods
     
