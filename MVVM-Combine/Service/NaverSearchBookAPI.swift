@@ -29,7 +29,7 @@ class NaverSearchBookAPI {
     }
     
     // TODO: combine 방식
-    func searchBookCombine(params: (query: String, nextStart: Int, display: Int)) -> AnyPublisher<NaverSearchBookResult, APIRequestError> {
+    func fetchCombine(params: (query: String, nextStart: Int, display: Int)) -> AnyPublisher<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return Fail(error: APIRequestError.invalidURL)
                 .eraseToAnyPublisher()
@@ -92,17 +92,22 @@ class NaverSearchBookAPI {
     }
     
     // TODO: combine 완성 후 삭제 예정
-    func searchBook(params: (query: String, nextStart: Int, display: Int))
+    func fetch(params: (query: String, nextStart: Int, display: Int))
     async -> Result<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return .failure(.invalidURL)
         }
         
-        components.queryItems = [
-            URLQueryItem(name: "query", value: query),
-            URLQueryItem(name: "start", value: String((page - 1) * itemsPerPage + 1)),
-            URLQueryItem(name: "display", value: String(itemsPerPage))
-        ]
+        components.queryItems = {
+            let query = params.query
+            let start = String(params.nextStart)
+            let display = String(params.display)
+            return [
+                URLQueryItem(name: "query", value: query),
+                URLQueryItem(name: "start", value: start),
+                URLQueryItem(name: "display", value: display)
+            ]
+        }()
         
         guard let url = components.url else {
             return .failure(.invalidURL)

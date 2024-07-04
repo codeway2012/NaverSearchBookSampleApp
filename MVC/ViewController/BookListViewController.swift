@@ -90,12 +90,12 @@ extension BookListViewController {
     // MARK: - UITableViewDataSourcePrefetching
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard !listModel.isFetching,
-              !listModel.isAllDataLoad else {
+        guard !listModel.isFetchingNaverSearchBookAPI,
+              !listModel.isAllDataLoadSearchQuery else {
             print("prefetchRowsAt - guard")
             return
         }
-        if indexPaths.contains(where: { $0.row >= listModel.triggerIndex }) {
+        if indexPaths.contains(where: { $0.row >= listModel.prefetchingTriggerIndex }) {
             listModel.searchBookListPrefetching()
         }
     }

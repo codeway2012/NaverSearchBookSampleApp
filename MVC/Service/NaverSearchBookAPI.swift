@@ -29,7 +29,7 @@ class NaverSearchBookAPI {
     }
     
     // async 방식
-    func searchBook(params: (query: String, nextStart: Int, display: Int))
+    func fetch(params: (query: String, nextStart: Int, display: Int))
     async -> Result<NaverSearchBookResult, APIRequestError> {
         guard var components = URLComponents(string: baseURL) else {
             return .failure(.invalidURL)

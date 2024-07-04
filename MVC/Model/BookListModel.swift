@@ -12,21 +12,20 @@ class BookListModel {
     
     // MARK: - Properties
     
-    var naverSearchBookAPI = NaverSearchBookAPI()
     weak var naverSearchBookListDelegate: BookListDelegate?
-    var isFetching: Bool = false
-    var isAllDataLoad: Bool = false
+    var naverSearchBookAPI = NaverSearchBookAPI()
+    var isFetchingNaverSearchBookAPI: Bool = false
+    var isAllDataLoadSearchQuery: Bool = false
     var bookList: [Book] = []
-    var triggerIndex: Int { return bookList.count - 12 }
+    var prefetchingTriggerIndex: Int { return bookList.count - 10 }
     var params: (query: String, nextStart: Int, display: Int) = ("iOS 프로그래밍", 0, 0)
-    var currentIndexPaths: [IndexPath] {
+    var indexPaths: [IndexPath] {
         let index : (start: Int, end: Int)
         index.start = params.nextStart - params.display - 1
         index.end = params.nextStart - 1
         return (index.start..<index.end)
             .map { IndexPath(row: $0, section: 0) }
     }
-
     
     // MARK: - Methods
     
@@ -38,44 +37,43 @@ class BookListModel {
     func searchBookList() {
         print("Model searchBookList")
         bookList.removeAll()
-        params = (query: params.query, nextStart: 1, display: 15)
+        isAllDataLoadSearchQuery = false
+        params = (query: params.query, nextStart: 1, display: 20)
         Task {
             await naverSearchBookListDelegate?.reloadTable()
-            isFetching = true
-            await refreshTableWithRequestedBookList()
-            await refreshCellsWithDownloadedImages()
-            isFetching = false
+            await refreshTableWithRequestBookList()
+            await refreshCellsWithDownloadBookImages()
         }
     }
     
     func searchBookListPrefetching() {
         print("searchBookListPrefetching")
         Task {
-            isFetching = true
-            await refreshTableWithRequestedBookList()
-            await refreshCellsWithDownloadedImages()
-            isFetching = false
+            await refreshTableWithRequestBookList()
+            await refreshCellsWithDownloadBookImages()
         }
     }
     
-    private func refreshTableWithRequestedBookList() async {
+    private func refreshTableWithRequestBookList() async {
+        isFetchingNaverSearchBookAPI = true
         let resultBookList: NaverSearchBookResult
-        switch await naverSearchBookAPI.searchBook(params: params) {
+        switch await naverSearchBookAPI.fetch(params: params) {
             case .success(let data):
-              resultBookList = data
+                resultBookList = data
             case .failure(let error):
-              print("NaverSearchBookListModel requestData Error: \(error.localizedDescription)")
-              return
+                print("NaverSearchBookListModel requestData Error: \(error.localizedDescription)")
+                return
         }
-
+        
         params.nextStart = resultBookList.start + resultBookList.display
         params.display = resultBookList.display
-        isAllDataLoad = resultBookList.display == 0 || params.nextStart > 1000
+        isAllDataLoadSearchQuery = resultBookList.display == 0 || params.nextStart > 1000
         bookList.append(contentsOf: resultBookList.items.map { Book($0) })
-        await naverSearchBookListDelegate?.insertTableRows(indexPaths: currentIndexPaths)
+        await naverSearchBookListDelegate?.insertTableRows(indexPaths: indexPaths)
     }
     
-    private func refreshCellsWithDownloadedImages() async {
+    private func refreshCellsWithDownloadBookImages() async {
+        isFetchingNaverSearchBookAPI = false
         let currentStart = params.nextStart - params.display - 1
         let lastBookList = bookList.suffix(params.display)
         for (index, value) in lastBookList.enumerated() {
@@ -84,7 +82,7 @@ class BookListModel {
                 bookList[currentIndex].image = downloadedImage
             }
         }
-        await naverSearchBookListDelegate?.reloadTableRows(indexPaths: currentIndexPaths)
+        await naverSearchBookListDelegate?.reloadTableRows(indexPaths: indexPaths)
     }
 }
 
